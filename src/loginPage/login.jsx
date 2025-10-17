@@ -1,16 +1,17 @@
-//import { useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import backgroundImage from './assets/LoginPageBackground.jpg';
 
 
-function App() {
+
+function Login() {
 
 
-    return (
-        <>
+  return (
+    <>
 
-            <div className="h-screen w-screen overflow-hidden">
+        <div className="h-screen w-screen overflow-hidden">
                 <div style={{ backgroundImage: `url(${backgroundImage})` }} className="bg-cover bg-center h-screen w-full flex justify-center items-center w-screen h-screen " >
                     <div className="w-150 h-110 p-5 shadow-lg bg-black rounded-md">
                         <h1 className="text-3x1 block text-center font-semibold"><i className="fa-solid fa-user"></i>Login</h1>
@@ -18,14 +19,14 @@ function App() {
                         <div className="mt-5">
                             <label For="username" className="block text-base mb-2">Username</label>
                             <input type="text" id="username"
-                                   className="border w-full text-base px-3 py-3 focus:outline-none focus:ring-0 focus:border-gray-600"
-                                   placeholder="Enter Username..."/>
+                                className="border w-full text-base px-3 py-3 focus:outline-none focus:ring-0 focus:border-gray-600"
+                                placeholder="Enter Username..."/>
                         </div>
                         <div className="mt-3">
                             <label For="password" className="block text-base mb-2">Password</label>
                             <input type="password" id="password"
-                                   className="border w-full text-base px-3 py-3 focus:outline-none focus:ring-0 focus:border-gray-600"
-                                   placeholder="Enter Password..."/>
+                                className="border w-full text-base px-3 py-3 focus:outline-none focus:ring-0 focus:border-gray-600"
+                                placeholder="Enter Password..."/>
                         </div>
                         <div className="mt-3 flex justify-between items-center">
                             <div>
@@ -37,9 +38,9 @@ function App() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
-    )
+        </div>
+    </>
+  )
 }
 
-export default App
+export default Login
