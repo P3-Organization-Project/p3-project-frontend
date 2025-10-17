@@ -4,8 +4,10 @@ function dashboard() {
 
 
     return (
-        <div> </div>
 
+        <h1>
+        HI Welcome to dashboard
+        </h1>
 
     )
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './App.css'
+import './login.css'
 import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import backgroundImage from './assets/LoginPageBackground.jpg';
 
@@ -12,7 +12,7 @@ function Login() {
     <>
 
         <div className="h-screen w-screen overflow-hidden">
-                <div style={{ backgroundImage: `url(${backgroundImage})` }} className="bg-cover bg-center h-screen w-full flex justify-center items-center w-screen h-screen " >
+                <div style={{ backgroundImage: `url(${backgroundImage})` }} className="bg-cover bg-center h-screen w-full flex justify-center items-center" >
                     <div className="w-150 h-110 p-5 shadow-lg bg-black rounded-md">
                         <h1 className="text-3x1 block text-center font-semibold"><i className="fa-solid fa-user"></i>Login</h1>
                         <hr className="mt-5"/>

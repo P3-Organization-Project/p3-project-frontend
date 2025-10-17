@@ -7,8 +7,8 @@ function routes(){
         <Router>
             <div>
                 <Routes>
-                    <Route path="/" element={<login />} />
-                    <Route path="/about" element={<Dashboard />} />
+                    <Route path="/" element={<Login />} />
+                    <Route path="/" element={<Dashboard />} />
                 </Routes>
             </div>
         </Router>
