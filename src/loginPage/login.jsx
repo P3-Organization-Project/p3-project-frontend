@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './login.css'
 import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import backgroundImage from './assets/LoginPageBackground.jpg';
@@ -7,6 +7,10 @@ import backgroundImage from './assets/LoginPageBackground.jpg';
 
 function Login() {
 
+    const navigate = useNavigate()
+    const goToDashboard = () => {
+        navigate("/dashboard");
+    };
 
   return (
     <>
@@ -34,7 +38,7 @@ function Login() {
                             </div>
                         </div>
                         <div className="mt-10">
-                            <button type="submit" className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 px-5 w-full rounded-md hover:bg-transparent hover:text indigo-700 font-semibold">Login</button>
+                            <button onClick={goToDashboard} type="submit" className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 px-5 w-full rounded-md hover:bg-transparent hover:text indigo-700 font-semibold">Login</button>
                         </div>
                     </div>
                 </div>

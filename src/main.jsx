@@ -4,17 +4,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import Login from './loginPage/login.jsx'
 import Dashboard from './dashboardPage/dashboard.jsx'
+import Case from './casePage/case.jsx'
 
 
 const router = createBrowserRouter([{
-    path: '/',
-    element: <Login />,
-},
-    {
-        path: '/dashboard',
-        element: <Dashboard />,
-    }
-
+    path: '/', element: <Login />,},
+    {path: '/dashboard', element: <Dashboard />,},
+    {path: '/case', element: <Case />,},
 ]);
 
 

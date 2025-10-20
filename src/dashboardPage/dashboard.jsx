@@ -1,14 +1,17 @@
 import "./dash.css"
+import {useNavigate} from "react-router-dom";
 
-function dashboard() {
+function Dashboard() {
 
-
+    const navigate = useNavigate()
+    const GoToCase = () => {
+        navigate("/case");
+    }
     return (
-
-        <h1>
-        HI Welcome to dashboard
-        </h1>
-
+        <div className="flex items-center justify-center h-screen">
+            <h1 className="text-3xl font-bold">Welcome to the Dashboard 🎉</h1>
+            <button onClick={GoToCase}>Caseoversigt</button>
+        </div>
     )
 }
-    export default dashboard
+    export default Dashboard
