@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import './login.css'
-import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import backgroundImage from './assets/LoginPageBackground.jpg';
 
 
