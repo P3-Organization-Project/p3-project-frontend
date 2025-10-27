@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 const Caseoverview = () => {
     const navigate = useNavigate()
-    const goToOpretcase = () => {
-        navigate('/opretCase')
+    const goTocreateCase = () => {
+        navigate('/createCase')
     }
 
     return (
@@ -16,7 +16,7 @@ const Caseoverview = () => {
                 <div className="header-actions">
                     <h1>📁 My Cases</h1>
                     <button className="case-create-btn"
-                            onClick={goToOpretcase}
+                            onClick={goTocreateCase}
                             type="submit">+ Create Case
                     </button>
 

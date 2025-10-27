@@ -47,8 +47,8 @@ function Dashboard() {
             <div className="grid grid-cols-3 gap-4">
                     <button onClick={goTo("/case")}>Case</button>
                     <button onClick={goTo("/client")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Klient</button>
-                    <button onClick={goTo("/materialer")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Materialer</button>
-                    <button onClick={goTo("/opretcase")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Opret Case</button>
+                    <button onClick={goTo("/materiel")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Materialer</button>
+                    <button onClick={goTo("/createCase")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Opret Case</button>
                     <button onClick={goTo("/door")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Dør</button>
                     <button onClick={goTo("/team")} className="h-69 w-90 bg-blue-500 text-white px-4 py-2 rounded">Team</button>
             </div>
