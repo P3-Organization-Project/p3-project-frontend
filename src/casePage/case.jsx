@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom'
 
 
 
-const Caseoverview = () => {
-    const navigate = useNavigate()
-    const goTocreateCase = () => {
-        navigate('/createCase')
-    }
+const Case = () => {
+
+    const navigate = useNavigate();
+
+    const goTo = (path) => () => navigate(path);
+
 
     return (
         <div className="h-screen w-screen overflow-hidden">
@@ -16,7 +17,7 @@ const Caseoverview = () => {
                 <div className="header-actions">
                     <h1>📁 My Cases</h1>
                     <button className="case-create-btn"
-                            onClick={goTocreateCase}
+                            onClick={goTo("/createCase")}
                             type="submit">+ Create Case
                     </button>
 
@@ -115,4 +116,4 @@ const Caseoverview = () => {
     );
 };
 
-export default Caseoverview;
+export default Case;
