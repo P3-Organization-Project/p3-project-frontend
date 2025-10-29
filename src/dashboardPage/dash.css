@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+.dashboardButton {
+  background-color: burlywood;
+  color: black;
+}
