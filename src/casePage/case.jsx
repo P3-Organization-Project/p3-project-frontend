@@ -12,7 +12,7 @@ const Case = () => {
 
 
     return (
-        <div className="h-screen w-screen overflow-hidden">
+        <div className="h-screen w-screen overflow-hidden bg-white">
             <div className="case-page">
                 <div className="header-actions">
                     <h1>📁 My Cases</h1>
