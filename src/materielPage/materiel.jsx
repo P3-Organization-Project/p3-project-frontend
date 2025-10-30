@@ -1,6 +1,6 @@
-import "./materialer.css"
+import "./materiel.css"
 
-function Materialer() {
+function Materiel() {
 
 
     return (
@@ -9,6 +9,6 @@ function Materialer() {
         </div>
     )
 }
-export default Materialer
+export default Materiel
 
 
