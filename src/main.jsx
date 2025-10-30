@@ -7,7 +7,7 @@ import Dashboard from './dashboardPage/dashboard.jsx'
 import Case from './casePage/case.jsx'
 import Client from './clientPage/client.jsx'
 import Materiel from './materielPage/materialer.jsx'
-import CreateCase from './createCasePage/opretcase.jsx'
+import CreateCase from './createCasePage/createcase.jsx'
 import Door from './doorPage/door.jsx'
 import Team from './teamPage/team.jsx'
 

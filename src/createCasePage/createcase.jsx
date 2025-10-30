@@ -1,8 +1,8 @@
-import './opretcase.css'
+import './createcase.css'
 import { useNavigate } from 'react-router-dom'
 import React from "react";
 
-function Opretcase() {
+function Createcase() {
     const navigate = useNavigate()
     const goToCaseOverview = () => {
         navigate('/case')
@@ -56,4 +56,4 @@ function Opretcase() {
     )
 }
 
-export default Opretcase
+export default Createcase
