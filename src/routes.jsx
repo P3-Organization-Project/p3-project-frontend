@@ -7,6 +7,8 @@ import Materiel from './materielPage/materiel.jsx'
 import Catalogue from './createCasePage/catalogue.jsx'
 import Practical from './createCasePage/practical.jsx'
 import CreateCase from './createCasePage/createcase.jsx'
+import Doormateriel from './createCasePage/doormateriel.jsx'
+import Orderoverview from './createCasePage/orderoverview.jsx'
 import Door from './doorPage/door.jsx'
 import Team from './teamPage/team.jsx'
 
@@ -23,6 +25,8 @@ function routes(){
                     <Route path="/createcase" element={<CreateCase />} />
                     <Route path="/catalogue" element={<Catalogue />} />
                     <Route path="/practical" element={<Practical />} />
+                    <Route path="/doormateriel" element={<Doormateriel />} />
+                    <Route path="/orderoverview" element={<Orderoverview />} />
                     <Route path="/door" element={<Door />} />
                     <Route path="/team" element={<Team />} />
 
