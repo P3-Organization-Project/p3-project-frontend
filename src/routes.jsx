@@ -20,7 +20,7 @@ function routes(){
                     <Route path="/case" element={<Case />} />
                     <Route path="/client" element={<Client />} />
                     <Route path="/materiel" element={<Materiel />} />
-                    <Route path="/createCase" element={<CreateCase />} />
+                    <Route path="/createcase" element={<CreateCase />} />
                     <Route path="/catalogue" element={<Catalogue />} />
                     <Route path="/practical" element={<Practical />} />
                     <Route path="/door" element={<Door />} />
