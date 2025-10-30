@@ -6,10 +6,13 @@ import Login from './loginPage/login.jsx'
 import Dashboard from './dashboardPage/dashboard.jsx'
 import Case from './casePage/case.jsx'
 import Client from './clientPage/client.jsx'
-import Materiel from './materielPage/materialer.jsx'
+import Materiel from './materielPage/materiel.jsx'
 import CreateCase from './createCasePage/createcase.jsx'
+import Catalogue from './createCasePage/catalogue.jsx'
+import Practical from './createCasePage/practical.jsx'
 import Door from './doorPage/door.jsx'
 import Team from './teamPage/team.jsx'
+
 
 
 const router = createBrowserRouter([{
@@ -18,7 +21,9 @@ const router = createBrowserRouter([{
     {path: '/case', element: <Case />,},
     {path: '/client', element: <Client />,},
     {path: '/materiel', element: <Materiel />,},
-    {path: '/createCase', element: <CreateCase />,},
+    {path: '/createcase', element: <CreateCase />,},
+    {path: '/practical', element: <Practical />,},
+    {path: '/catalogue', element: <Catalogue />,},
     {path: '/door', element: <Door />,},
     {path: '/team', element: <Team />,},
 ]);
