@@ -1,4 +1,4 @@
-import './opretcase.css'
+import './createcase.css'
 import { useNavigate } from 'react-router-dom'
 import React from "react";
 
