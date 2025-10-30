@@ -9,7 +9,7 @@ function Opretcase() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-screen bg-white">
             <h1>Create Case 🎉</h1>
 
             <div className="case-main">
