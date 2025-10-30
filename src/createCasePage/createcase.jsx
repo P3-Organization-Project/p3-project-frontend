@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import React from "react";
 
 function Createcase() {
-    const navigate = useNavigate()
-    const goToCaseOverview = () => {
-        navigate('/case')
-    }
+    const navigate = useNavigate();
+
+    const goTo = (path) => () => navigate(path);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen bg-white">
@@ -29,7 +28,7 @@ function Createcase() {
 
                 {/*Door*/}
                 <h2>Add Door Model</h2>
-                <button className="createcase-catalogue-btn">Door Catalogue</button>
+                <button onClick={goTo("/catalogue")} className="createcase-catalogue-btn">Door Catalogue</button>
 
                 <h2>Added Doors</h2>
 
@@ -49,7 +48,7 @@ function Createcase() {
                 <div className="createcase-action-btn">
                     <button
                         className="createcase-cancel-btn"
-                        onClick={goToCaseOverview}
+                        onClick={goTo("/catalogue")}
                         type="submit"
                     >
                         Cancel
