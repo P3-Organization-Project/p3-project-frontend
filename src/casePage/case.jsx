@@ -47,8 +47,8 @@ const Case = () => {
                         <td>7.000 DKK</td>
                     </tr>
                     <tr>
-                        <td className="caseID">""</td>
-                        <td className="client">""</td>
+                        <td className="caseID">66238965</td>
+                        <td className="client">Pia Kjærsgaard</td>
                         <td className="assigned">Hans Marker</td>
                         <td className="doortype">Door Type B</td>
                         <td>12/10/25</td>

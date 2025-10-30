@@ -1,6 +1,30 @@
 @import "tailwindcss";
 
+/*Case ID*/
+.case-id-box {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: black;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.case-id-value {
+    font-weight: bold;
+}
+
 /*MAIN Content*/
+
+h1{
+    font-weight: bold;
+}
 
 .case-main {
   flex: 1;
@@ -9,7 +33,7 @@
   flex-direction: column;
   align-items: flex-start;
   color:black;
-
+  font-weight: bold;
 }
 
 /*CLIENT Section*/
@@ -72,24 +96,24 @@
   flex-direction: column;
 }
 .status-dropdown {
-  width: 180px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+    width: 180px;
+    border-radius: 6px;
     background-color: #001aff;
     color:white;
     border: none;
     padding: 8px 16px;
-    border-radius: 6px;
     cursor: pointer;
 }
 
 
 /*ACTION Buttons*/
 .createcase-action-btn {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .createcase-create-btn {

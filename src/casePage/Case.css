@@ -36,24 +36,32 @@ tr:nth-child(even) {
 
 .status {
     color: black;
-    font-weight: 600;
     padding: 4px 10px;
     border-radius: 8px;
-    display: inline-block;
-    font-size: 13px;
+    display: inline-block
 }
 
-.lead {
+.status::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status.lead::before{
     background-color:green;
 }
 
-.performa {
+.status.performa::before {
     background-color:rgb(233, 233, 66);
 }
 
-.finish{
+.status.finish::before{
     background-color:red
 }
+
 
 .caseID{
     text-decoration: underline;
@@ -71,14 +79,6 @@ tr:nth-child(even) {
     margin-bottom: 15px;
 }
 
-.filter-btn {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-    font-size: 14px;
-}
 
 .case-create-btn {
     background-color: #001aff;
