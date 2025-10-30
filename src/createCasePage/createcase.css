@@ -8,15 +8,25 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  color:black;
+
 }
 
 /*CLIENT Section*/
 .client-section {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 24px;
+}
+
+.client-controls{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
 }
 
 .client-dropdown {
@@ -28,7 +38,7 @@
     cursor: pointer;
 }
 
-.opretcase-createClient {
+.createcase-createClient {
     background-color: #001aff;
     color:white;
     border: none;
@@ -37,26 +47,30 @@
     cursor: pointer;
 }
 
+/*DOOR Section*/
+.createcase-catalogue-btn{
+    background-color: #001aff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
 /*STATUS Section*/
-.opretCase-status {
+.createcase-status {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   width: 450px;
   margin-top: 20px;
+  color: black;
 }
 
 .status-box {
   display: flex;
   flex-direction: column;
 }
-
-.status-label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: white;
-}
-
 .status-dropdown {
   width: 180px;
   padding: 6px 10px;
@@ -70,25 +84,15 @@
     cursor: pointer;
 }
 
-/*DOOR Section*/
-.opretcase-catalogue-btn{
-    background-color: #001aff;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
 
 /*ACTION Buttons*/
-.opretcase-action-btn {
+.createcase-action-btn {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-.opretcase-create-btn {
+.createcase-create-btn {
     background-color: #001aff;
     color:white;
     border: none;
@@ -97,7 +101,7 @@
     cursor: pointer;
 }
 
-.opretcase-cancel-btn{
+.createcase-cancel-btn{
     background-color: grey;
     color:white;
     border: none;
