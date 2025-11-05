@@ -20,7 +20,7 @@ function Createcase() {
 
     const handleSaveClient = () => {
         if (!client.name || !client.email || !client.phone) {
-            alert("Please fill out all client fields!");
+            alert("Please fill out all the marked fields!");
             return;
         }
         console.log("New client created:", client);
