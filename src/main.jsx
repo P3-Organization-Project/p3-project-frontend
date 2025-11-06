@@ -10,7 +10,6 @@ import Materiel from './materielPage/materiel.jsx'
 import CreateCase from './createCasePage/createcase.jsx'
 import Catalogue from './createCasePage/catalogue.jsx'
 import Practical from './createCasePage/practical.jsx'
-import Doormateriel from './createCasePage/doormateriel.jsx'
 import Orderoverview from './createCasePage/orderoverview.jsx'
 import Door from './doorPage/door.jsx'
 import Team from './teamPage/team.jsx'
@@ -26,7 +25,6 @@ const router = createBrowserRouter([{
     {path: '/createcase', element: <CreateCase />,},
     {path: '/practical', element: <Practical />,},
     {path: '/catalogue', element: <Catalogue />,},
-    {path: '/doormateriel', element: <Doormateriel />,},
     {path: '/orderoverview', element: <Orderoverview />,},
     {path: '/door', element: <Door />,},
     {path: '/team', element: <Team />,},

@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+.dbbtn {
+  background-color: #8a8a8a;
+  color: black;
+}
+
+.sngbtn {
+  background-color: #8a8a8a;
+  color: black;
+}
+
+.ktlbtn {
+  background-color: #8a8a8a;
+  color: black;
+}
+
+ .prakbtn { 
+  background-color: #8a8a8a;
+  color: black;
+} 
+
+.oversigtbtn {
+  background-color: #8a8a8a;
+  color: black;
+}
+
