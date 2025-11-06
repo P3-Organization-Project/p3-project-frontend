@@ -6,6 +6,28 @@ function Createcase() {
     const navigate = useNavigate();
     const [status, setStatus] = useState("");
 
+    const [showClientModal, setShowClientModal] = useState(false);
+    const [client, setClient] = useState({
+        name: "",
+        email: "",
+        phone: "",
+    });
+
+    const handleClientInput = (e) => {
+        const { name, value } = e.target;
+        setClient({ ...client, [name]: value });
+    };
+
+    const handleSaveClient = () => {
+        if (!client.name || !client.email || !client.phone) {
+            alert("Please fill out all the marked fields!");
+            return;
+        }
+        console.log("New client created:", client);
+        setShowClientModal(false);
+        setClient({ name: "", email: "", phone: "" });
+    };
+
     {/*Case ID - SHOULD BE GENERATED RANDOMLY */}
     const caseId = "📁12345678";
 
@@ -29,7 +51,12 @@ function Createcase() {
                             <option>-----</option>
                         </select>
 
-                        <button className="createcase-createClient">+ Create New Client</button>
+                        <button
+                            className="createcase-createClient"
+                            onClick={() => setShowClientModal(true)}
+                        >
+                            + Create New Client
+                        </button>
                     </div>
                 </div>
 
@@ -77,6 +104,50 @@ function Createcase() {
                         + Create Case
                     </button>
                 </div>
+            {/*Client popup*/}
+            {showClientModal && (
+                <div className="modal-overlay">
+                    <div className="modal-box">
+                        <h2>Client Info</h2>
+
+                        <label>Name *</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={client.name}
+                            onChange={handleClientInput}
+                            placeholder="Enter Client Name"
+                        />
+
+                        <label>Email *</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={client.email}
+                            onChange={handleClientInput}
+                            placeholder="Enter Client Email"
+                        />
+
+                        <label>Phone *</label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            value={client.phone}
+                            onChange={handleClientInput}
+                            placeholder="Enter Client Phone Number"
+                        />
+
+                        <div className="modal-actions">
+                            <button onClick={() => setShowClientModal(false)} className="modal-cancel-btn">
+                                Cancel
+                            </button>
+                            <button onClick={handleSaveClient} className="modal-save-btn">
+                                + Create Client
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
