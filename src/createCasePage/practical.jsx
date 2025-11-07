@@ -1,18 +1,44 @@
 import './createcase.css'
 import { useNavigate } from 'react-router-dom'
-import React from "react";
-import { useState } from "react";
+import { React } from "react";
+import { useState, useEffect } from "react";
 
 import overgaardLogo from './images/overgaardwoodlogo.jpg';
 
 
 function Practical() {
-    const [hulmaal, setHulmaal] = useState({ length: "", width: "" });
+    const [hulmaalLength, setHulmaalLength] = useState("");
+    const [hulmaalWidth, setHulmaalWidth]= useState("");
+    const [fugeLuft, setFugeLuft] = useState("");
+    const [haengselSide, setHaengselSide] = useState("");
+    const [karmOffset, setKarmOffset] = useState({ minus: "", plus: "" });
+    const [antal, setAntal] = useState("");
+
+    //loads the existing input
+    useEffect(() => {
+        const saved = localStorage.getItem("practicalForm");
+        console.log("Loaded from localStorage:", saved);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.hulmaalLength) setHulmaalLength(parsed.hulmaalLength);
+            if (parsed.hulmaalWidth) setHulmaalWidth(parsed.hulmaalWidth);
+            if (parsed.fugeLuft) setFugeLuft(parsed.fugeLuft);
+            if (parsed.haengselSide) setHaengselSide(parsed.haengselSide);
+            if (parsed.karmOffset) setKarmOffset(parsed.karmOffset);
+            if (parsed.antal) setAntal(parsed.antal);
+        }
+    }, []);
+    //saves the existing input
+    useEffect(() => {
+        const data = { hulmaalLength, hulmaalWidth, fugeLuft, haengselSide, karmOffset, antal };
+        localStorage.setItem("practicalForm", JSON.stringify(data));
+    }, [hulmaalLength, hulmaalWidth, fugeLuft, haengselSide, karmOffset, antal]);
 
     const navigate = useNavigate();
 
     const goTo = (path) => () => navigate(path);
-    const [accountOpen, setAccountOpen] = useState(false); 
+
+    const [accountOpen, setAccountOpen] = useState(false);
 
     return(
     
@@ -173,18 +199,18 @@ function Practical() {
                             <td className="border px-4 py-2">
                                 <input
                                     type="text"
-                                    value={hulmaal.length}
-                                    onChange={(e) => setHulmaal({ ...hulmaal, length: e.target.value })}
-                                    placeholder="fx. 2000mm"
+                                    value={hulmaalLength}
+                                    onChange={(e) => setHulmaalLength(e.target.value)}
+                                    placeholder=""
                                     className="w-full border border-gray-300 rounded px-2 py-1"
                                 />
                             </td>
                             <td className="border px-4 py-2">
                                 <input
                                     type="text"
-                                    value={hulmaal.width}
-                                    onChange={(e) => setHulmaal({ ...hulmaal, width: e.target.value })}
-                                    placeholder="fx. 1400mm"
+                                    value={hulmaalWidth}
+                                    onChange={(e) => setHulmaalWidth(e.target.value)}
+                                    placeholder=""
                                     className="w-full border border-gray-300 rounded px-2 py-1"
                                 />
                             </td>
@@ -199,14 +225,25 @@ function Practical() {
                     <div className="flex gap-8 items-center">
                         <label className="flex flex-col items-center">
                             <span>5mm</span>
-                            <input type="checkbox" className="w-5 h-5 mt-1" />
+                            <input
+                                type="checkbox"
+                                className="w-5 h-5 mt-1"
+                                checked={fugeLuft === "5mm"}
+                                onChange={() => setFugeLuft(fugeLuft === "5mm" ? "" : "5mm")}
+                            />
                         </label>
                         <label className="flex flex-col items-center">
                             <span>10mm</span>
-                            <input type="checkbox" className="w-5 h-5 mt-1" />
+                            <input
+                                type="checkbox"
+                                className="w-5 h-5 mt-1"
+                                checked={fugeLuft === "10mm"}
+                                onChange={() => setFugeLuft(fugeLuft === "10mm" ? "" : "10mm")}
+                            />
                         </label>
                     </div>
                 </section>
+
 
                 {/* Hængsel side Section */}
                 <section className="w-full max-w-md">
@@ -214,15 +251,27 @@ function Practical() {
                     <div className="flex justify-around items-center">
                         <label className="flex flex-col items-center">
                             <span>Venstre</span>
-                            {/* Add SVG or image for hinge illustration */}
                             <div className="w-16 h-8 bg-gray-100 border border-black mt-1"></div>
-                            <input type="checkbox" className="w-5 h-5 mt-2" />
+                            <input
+                                type="checkbox"
+                                className="w-5 h-5 mt-2"
+                                checked={haengselSide === "venstre"}
+                                onChange={() =>
+                                    setHaengselSide(haengselSide === "venstre" ? "" : "venstre")
+                                }
+                            />
                         </label>
-
                         <label className="flex flex-col items-center">
                             <span>Højre</span>
                             <div className="w-16 h-8 bg-gray-100 border border-black mt-1"></div>
-                            <input type="checkbox" className="w-5 h-5 mt-2" />
+                            <input
+                                type="checkbox"
+                                className="w-5 h-5 mt-2"
+                                checked={haengselSide === "hojre"}
+                                onChange={() =>
+                                    setHaengselSide(haengselSide === "hojre" ? "" : "hojre")
+                                }
+                            />
                         </label>
                     </div>
                 </section>
@@ -245,6 +294,8 @@ function Practical() {
                     <h2 className="font-bold text-xl mb-2">Antal</h2>
                     <input
                         type="text"
+                        value={antal}
+                        onChange={(e) => setAntal(e.target.value)}
                         placeholder="1, 2, 3 etc"
                         className="w-full border border-gray-300 rounded px-3 py-2"
                     />
@@ -254,7 +305,10 @@ function Practical() {
 
         {/* Bottom Buttons */}
         <button
-          onClick={goTo("/createcase")}
+            onClick={() => {
+                localStorage.removeItem("practicalForm");
+                goTo("/createcase")();
+            }}
           className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
         >
           Afbryd
