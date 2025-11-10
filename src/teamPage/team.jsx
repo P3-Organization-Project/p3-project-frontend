@@ -1,12 +1,116 @@
-import './team.css'
+import React from "react";
+import './Case.css'
+import { useNavigate } from 'react-router-dom'
 
-function Team() {
+
+
+const Case = () => {
+
+    const navigate = useNavigate();
+
+    const goTo = (path) => () => navigate(path);
 
 
     return (
-        <div className="flex items-center justify-center h-screen">
-            <h1 className="text-3xl font-bold">Welcome to the teams 🎉</h1>
+        <div className="h-screen w-screen overflow-hidden bg-white">
+            <div className="Team-page">
+                <div className="header-actions">
+                    <h1>📁 Team </h1>
+                    <button className="team-create-btn"
+                            type="submit">+ Create Case
+                    </button>
+
+                </div>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>User ID:</th>
+                        <th>Name:</th>
+                        <th>Email:</th>
+                        <th>Assigned Case</th>
+                        <th>Status:</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td className="userID">56842364</td>
+                        <td className="name">Ole Jensen</td>
+                        <td className="email">Hans Marker</td>
+                        <td><span className="">Available</span></td>
+                        <td>08/10/25</td>
+
+                        <td>7.000 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">66238965</td>
+                        <td className="client">Pia Kjærsgaard</td>
+                        <td className="assigned">Hans Marker</td>
+                        <td className="doortype">Door Type B</td>
+                        <td>12/10/25</td>
+                        <td><span className="status lead">Lead</span></td>
+                        <td>7.500 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">66842362</td>
+                        <td className="client">Lars Løkke</td>
+                        <td className="assigned">Rosa Nielsen</td>
+                        <td className="doortype">Door Type C</td>
+                        <td>06/12/25</td>
+                        <td><span className="status finish">Finish</span></td>
+                        <td>8.000 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">12345678</td>
+                        <td className="client">Anders Hemmingsen</td>
+                        <td className="assigned">Stine Petersen</td>
+                        <td className="doortype">Door Type D</td>
+                        <td>10/10/25</td>
+                        <td><span className="status performa">Performa</span></td>
+                        <td>8.250 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">21345678</td>
+                        <td className="client">Jacob Hermann</td>
+                        <td className="assigned">Stine Petersen</td>
+                        <td className="doortype">Door Type E</td>
+                        <td>17/10/25</td>
+                        <td><span className="status lead">Lead</span></td>
+                        <td>8.500 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">26842365</td>
+                        <td className="client">Peter Olsen</td>
+                        <td className="assigned">Hans Marker</td>
+                        <td className="doortype">Door Type F</td>
+                        <td>18/10/25</td>
+                        <td><span className="status performa">Performa</span></td>
+                        <td>6.000 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">36842361</td>
+                        <td className="client">Julie Pedersen</td>
+                        <td className="assigned">Hans Marker</td>
+                        <td className="doortype">Door Type G</td>
+                        <td>19/10/25</td>
+                        <td><span className="status performa">Performa</span></td>
+                        <td>4.000 DKK</td>
+                    </tr>
+                    <tr>
+                        <td className="caseID">76842305</td>
+                        <td className="client">Ida Sofie Nielsen</td>
+                        <td className="assigned">Hans Marker</td>
+                        <td className="doortype">Door Type H</td>
+                        <td>25/10/25</td>
+                        <td><span className="status finish">Finish</span></td>
+                        <td>6.500 DKK</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    )
-}
-export default Team
+    );
+};
+
+export default Case;
