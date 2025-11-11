@@ -1,0 +1,171 @@
+# GitHub Actions Workflow - Frontend Deployment
+name: Deploy Frontend to Production
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.js'
+      - '.env.production'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '2o'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build production bundle
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        run: npm run build
+        
+      - name: Verify build output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "dist/ directory not found!"
+            exit 1
+          fi
+          echo "Build successful"
+          echo "Contents:"
+          ls -lah dist/
+          echo "Total size: $(du -sh dist/ | cut -f1)"
+      
+      - name: Deploy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/*"
+          target: "/tmp/doors-frontend-deploy/"
+          strip_components: 1
+          rm: true
+      
+      - name: Install files and reload Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Backup current deployment
+            if [ -d "/var/www/doors-portal/dist" ]; then
+              BACKUP_DIR="/var/www/doors-portal/dist.backup.$(date +%Y%m%d-%H%M%S)"
+              echo "Creating backup at $BACKUP_DIR"
+              sudo mv /var/www/doors-portal/dist "$BACKUP_DIR"
+            fi
+            
+            # Move new files
+            sudo mkdir -p /var/www/doors-portal/dist
+            sudo mv /tmp/doors-frontend-deploy/* /var/www/doors-portal/dist/
+            
+            # Set permissions
+            sudo chown -R www-data:www-data /var/www/doors-portal/dist
+            sudo chmod -R 755 /var/www/doors-portal/dist
+            
+            # Test Nginx configuration
+            echo "Testing Nginx configuration..."
+            sudo nginx -t
+            
+            # Reload Nginx
+            echo "Reloading Nginx..."
+            sudo systemctl reload nginx
+            
+            # Verify Nginx is running
+            sudo systemctl status nginx --no-pager
+            
+            # Clean up old backups (keep last 3)
+            cd /var/www/doors-portal
+            OLD_BACKUPS=$(ls -t dist.backup.* 2>/dev/null | tail -n +4)
+            if [ -n "$OLD_BACKUPS" ]; then
+              echo "Cleaning up old backups..."
+              echo "$OLD_BACKUPS" | xargs sudo rm -rf
+            fi
+      
+      - name: Test Nginx health endpoint
+        run: |
+          echo "Testing Nginx health endpoint..."
+          sleep 2
+          
+          RESPONSE=$(curl -s http://${{ secrets.SERVER_DOMAIN }}/health)
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/health)
+          
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response: $RESPONSE"
+          
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "Nginx health check passed"
+          else
+            echo "Nginx health check failed"
+            exit 1
+          fi
+      
+      - name: Test frontend accessibility
+        run: |
+          echo "Testing frontend..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/)
+          
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "Frontend is accessible (HTTP $HTTP_CODE)"
+          else
+            echo "Frontend returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+      
+      - name: Test backend health through API proxy
+        run: |
+          echo "Testing backend health through Nginx proxy..."
+          
+          RESPONSE=$(curl -s http://${{ secrets.SERVER_DOMAIN }}/api/actuator/health)
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/api/actuator/health)
+          
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response:"
+          echo "$RESPONSE" | jq '.' 2>/dev/null || echo "$RESPONSE"
+          
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "Backend health accessible through proxy"
+            
+            # Validate backend is UP
+            if echo "$RESPONSE" | grep -q '"status":"UP"'; then
+              echo "Backend status: UP"
+            fi
+            
+            # Check database through proxy
+            if echo "$RESPONSE" | grep -q '"db".*"status":"UP"'; then
+              echo "Database: UP (via proxy)"
+            fi
+          else
+            echo "Backend health check failed through proxy (HTTP $HTTP_CODE)"
+            exit 1
+          fi
+      
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "Frontend Deployment Successful!"
+          echo "Location: /var/www/doors-portal/dist/"
+          echo "Nginx: reloaded"
+          echo "Frontend: http://${{ secrets.SERVER_DOMAIN }}/"
+          echo "Nginx Health: http://${{ secrets.SERVER_DOMAIN }}/health"
+          echo "Backend Health: http://${{ secrets.SERVER_DOMAIN }}/api/actuator/health"
