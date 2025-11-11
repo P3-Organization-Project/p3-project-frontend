@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* Layout */
-.catalogue-container {
+/* General Layout */
+.practical-container {
   display: flex;
   min-height: 100vh;
   min-width: 100vw;
@@ -10,7 +10,7 @@
   padding-top: 2rem;
 }
 
-.main-layout {
+.practical-main {
   display: flex;
   min-height: 100vh;
   min-width: 100vw;
@@ -26,7 +26,7 @@
   width: 100%;
   height: 3rem;
   background: #374151; /* gray-700 */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   z-index: 50;
   display: flex;
   align-items: center;
@@ -34,53 +34,13 @@
   padding: 0 1.5rem;
 }
 
-.logo-button {
+.logo-btn {
   height: 2.5rem;
   width: 2.5rem;
   background-size: cover;
   background-position: center;
   border: none;
   cursor: pointer;
-}
-
-/* Tabs */
-.tab-container {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: #545e6c;
-}
-
-.tab-buttons {
-  display: flex;
-  gap: 1.25rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #d1d5db;
-  justify-content: center;
-}
-
-.tab-btn {
-  padding: 0.25rem 1.5rem;
-  font-weight: 600;
-  border-radius: 0.375rem;
-  transition: all 0.2s ease;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-.tab-btn:hover {
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.tab-btn.active {
-  color: white;
-  border-bottom: 4px solid #1d4ed8;
 }
 
 /* Account Dropdown */
@@ -108,7 +68,7 @@
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 0.375rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 0;
   z-index: 50;
 }
@@ -137,7 +97,7 @@
   height: 100%;
   width: 16rem;
   background: white;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   z-index: 50;
   display: flex;
   flex-direction: column;
@@ -182,7 +142,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .client-section label {
@@ -226,47 +186,122 @@
   background: #2563eb;
 }
 
-/* Door Grid */
-.door-grid-container {
+/* Main Content */
+.practical-content {
+  flex: 1;
+  margin-left: 16rem;
+  overflow-y: auto;
+  padding: 2.5rem;
+  position: relative;
+  background: white;
+}
+
+/* Form Layout */
+.form-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-top: 2.5rem;
+  justify-content: flex-start;
+  min-height: 100vh;
   width: 100%;
-  padding: 0 2rem;
-}
-
-.door-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  background: white;
+  padding: 2rem;
   gap: 2rem;
-  max-width: 80rem;
-  justify-items: center;
 }
 
-.door-btn {
-  color: white;
-  font-weight: 600;
+.form-section {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.form-section h2 {
+  font-weight: 700;
   font-size: 1.25rem;
-  height: 30rem;
-  width: 30rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  background-size: cover;
-  background-position: center;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
+  margin-bottom: 0.5rem;
 }
 
-.door-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 0 2px #93c5fd;
+/* Tables */
+.table {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-collapse: collapse;
 }
 
-.door-btn.selected {
-  transform: scale(1.05);
-  box-shadow: 0 0 0 4px #3b82f6;
+.table th,
+.table td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.table thead {
+  background: #f3f4f6;
+}
+
+.table input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Checkbox */
+.checkbox-group {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.checkbox-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Hængsel Section */
+.haengsel-group {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.haengsel-box {
+  width: 4rem;
+  height: 2rem;
+  background: #f3f4f6;
+  border: 1px solid black;
+  margin-top: 0.25rem;
+}
+
+/* Karm Section */
+.karm-group {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.karm-box {
+  width: 4rem;
+  height: 2rem;
+  background: #f3f4f6;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Input Fields */
+.text-input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
 }
 
 /* Bottom Buttons */
@@ -277,7 +312,7 @@
   background: #e5e7eb;
   color: white;
   border-radius: 0.375rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -294,5 +329,3 @@
 .bottom-btn.right {
   right: 1rem;
 }
-
-

@@ -1,6 +1,10 @@
-@import "tailwindcss";
-:root{
-    overscroll-behavior: none;
+@import "tailwindcss/base";
 
+:root {
+  overscroll-behavior: none;
 }
 
+a,
+a:visited {
+  color: inherit;
+}

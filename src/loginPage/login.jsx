@@ -1,86 +1,84 @@
-import { useNavigate } from 'react-router-dom'
-import './login.css'
-import backgroundImage from './assets/LoginPageBackground.jpg'
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import './login.css';
+import backgroundImage from './assets/LoginPageBackground.jpg';
+import { useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Login() {
-    const [showPassword, setShowPassword] = useState(false)
-    const togglePassword = () => setShowPassword(prev => !prev)
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword((prev) => !prev);
 
-    const navigate = useNavigate()
-    const goToDashboard = () => {
-        navigate('/dashboard')
-    }
+  const navigate = useNavigate();
+  const goToDashboard = () => {
+    navigate('/dashboard');
+  };
 
-    return (
-        <div className="h-screen w-screen overflow-hidden">
-            <div
-                style={{ backgroundImage: `url(${backgroundImage})` }}
-                className="bg-cover bg-center h-screen w-full flex justify-center items-center"
+  return (
+    <div className="h-screen w-screen overflow-hidden">
+      <div
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+        className="bg-cover bg-center h-screen w-full flex justify-center items-center"
+      >
+        {/* Login Box style */}
+        <div className="w-96 p-8 bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-2xl border border-white border-opacity-20">
+          <h1 className="text-3xl text-white text-center font-bold mb-6">
+            <i className="fa-solid fa-user mr-2"></i> Login
+          </h1>
+          <hr className="border-gray-400 border-opacity-30 mb-6" />
+
+          {/* Username */}
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-black text-sm font-medium mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              className="w-full px-4 py-3 bg-opacity-20 border border-gray-300 border-opacity-30 rounded-md text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              placeholder="Enter Username..."
+            />
+          </div>
+
+          {/* Password */}
+          <div className="mb-4 relative">
+            <label htmlFor="password" className="block text-black text-sm font-medium mb-2">
+              Password
+            </label>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              className="w-full px-4 py-3 pr-12 bg-opacity-20 border border-gray-300 border-opacity-30 rounded-md text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              placeholder="Enter Password..."
+            />
+            {/* Eye Toggle Button */}
+            <button
+              type="button"
+              onClick={togglePassword}
+              className="absolute right-1 top-8.5 text-gray-800 text-xl hover:text-gray-300 transition bg-white bg-opacity-50"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
-                <div className="w-150 h-110 p-5 shadow-lg bg-black rounded-md relative">
-                    <h1 className="text-3x1 block text-center font-semibold">
-                        <i className="fa-solid fa-user"></i> Login
-                    </h1>
-                    <hr className="mt-5" />
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
 
-                    {/* Username */}
-                    <div className="mt-5">
-                        <label htmlFor="username" className="block text-base mb-2">
-                            Username
-                        </label>
-                        <input
-                            type="text"
-                            id="username"
-                            className="border w-full text-base px-3 py-3 focus:outline-none focus:ring-0 focus:border-gray-600"
-                            placeholder="Enter Username..."
-                        />
-                    </div>
+          {/* Forgot password */}
+          <div className="flex justify-end mb-6">
+            <a href="#" className="text-gray-300 text-sm font-medium hover:text-gray-200">
+              Forgot Password?
+            </a>
+          </div>
 
-                    {/* Password */}
-                    <div className="mt-3 relative">
-                        <label htmlFor="password" className="block text-base mb-2">
-                            Password
-                        </label>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            id="password"
-                            className="border w-full text-base px-3 py-3 focus:outline-none focus:ring-0 focus:border-gray-600 pr-10"
-                            placeholder="Enter Password..."
-                        />
-
-                        {/*Toggle show password */}
-                        <button
-                            type="button"
-                            onClick={togglePassword}
-                            className="absolute right-3 top-11 transform -translate-y-1/2 text-gray-600 mt-3"
-                        >
-                            {showPassword ? '👁' : '👁️'}
-                        </button>
-                            <input/>
-                    </div>
-
-                    {/* Forgot password */}
-                    <div className="mt-3 flex justify-between items-center">
-                        <a href="#" className="text-indigo-800 font-semibold">
-                            Forgot Password?
-                        </a>
-                    </div>
-
-                    {/* Login button */}
-                    <div className="mt-10">
-                        <button
-                            onClick={goToDashboard}
-                            type="submit"
-                            className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 px-5 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"
-                        >
-                            Login
-                        </button>
-                    </div>
-                </div>
-            </div>
+          {/* Login button */}
+          <button
+            onClick={goToDashboard}
+            className="w-full py-3 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-200"
+          >
+            Login
+          </button>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
-export default Login
+export default Login;
