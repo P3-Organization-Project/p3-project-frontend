@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Catalogue.css";
+import "./catalogue.css";
 
 import buttonImageA from './images/singleDoorA.jpg';
 import buttonImageB from './images/singleDoorB.jpg';
