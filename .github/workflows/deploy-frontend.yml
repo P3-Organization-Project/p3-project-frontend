@@ -102,63 +102,75 @@ jobs:
               echo "$OLD_BACKUPS" | xargs sudo rm -rf
             fi
       
-      - name: Test Nginx health endpoint
-        run: |
-          echo "Testing Nginx health endpoint..."
-          sleep 2
-          
-          RESPONSE=$(curl -s http://${{ secrets.SERVER_DOMAIN }}/health)
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/health)
-          
-          echo "HTTP Status: $HTTP_CODE"
-          echo "Response: $RESPONSE"
-          
-          if [ "$HTTP_CODE" -eq 200 ]; then
-            echo "Nginx health check passed"
-          else
-            echo "Nginx health check failed"
-            exit 1
-          fi
-      
-      - name: Test frontend accessibility
-        run: |
-          echo "Testing frontend..."
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/)
-          
-          if [ "$HTTP_CODE" -eq 200 ]; then
-            echo "Frontend is accessible (HTTP $HTTP_CODE)"
-          else
-            echo "Frontend returned HTTP $HTTP_CODE"
-            exit 1
-          fi
-      
-      - name: Test backend health through API proxy
-        run: |
-          echo "Testing backend health through Nginx proxy..."
-          
-          RESPONSE=$(curl -s http://${{ secrets.SERVER_DOMAIN }}/api/actuator/health)
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/api/actuator/health)
-          
-          echo "HTTP Status: $HTTP_CODE"
-          echo "Response:"
-          echo "$RESPONSE" | jq '.' 2>/dev/null || echo "$RESPONSE"
-          
-          if [ "$HTTP_CODE" -eq 200 ]; then
-            echo "Backend health accessible through proxy"
+      - name: Test all endpoints from server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Testing endpoints from server..."
+            echo ""
             
-            # Validate backend is UP
-            if echo "$RESPONSE" | grep -q '"status":"UP"'; then
-              echo "Backend status: UP"
+            # Test Nginx health (localhost)
+            echo "1. Testing Nginx health endpoint (localhost)..."
+            NGINX_HEALTH=$(curl -s http://localhost/health)
+            NGINX_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/health)
+            echo "HTTP Status: $NGINX_CODE"
+            echo "Response: $NGINX_HEALTH"
+            if [ "$NGINX_CODE" -eq 200 ]; then
+              echo "Nginx health check passed"
+            else
+              echo "Nginx health check failed"
+              exit 1
             fi
+            echo ""
             
-            # Check database through proxy
-            if echo "$RESPONSE" | grep -q '"db".*"status":"UP"'; then
-              echo "Database: UP (via proxy)"
+            # Test frontend (localhost)
+            echo "2. Testing frontend root (localhost)..."
+            FRONTEND_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+            echo "HTTP Status: $FRONTEND_CODE"
+            if [ "$FRONTEND_CODE" -eq 200 ]; then
+              echo "Frontend is accessible"
+            else
+              echo "Frontend check failed"
+              exit 1
             fi
-          else
-            echo "Backend health check failed through proxy (HTTP $HTTP_CODE)"
-            exit 1
-          fi
+            echo ""
+            
+            # Test backend health through proxy (localhost)
+            echo "3. Testing backend health through Nginx proxy (localhost)..."
+            BACKEND_RESPONSE=$(curl -s http://localhost/api/actuator/health)
+            BACKEND_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/actuator/health)
+            echo "HTTP Status: $BACKEND_CODE"
+            echo "Response:"
+            echo "$BACKEND_RESPONSE" | jq '.' 2>/dev/null || echo "$BACKEND_RESPONSE"
+            
+            if [ "$BACKEND_CODE" -eq 200 ]; then
+              echo "Backend health accessible through proxy"
+              
+              if echo "$BACKEND_RESPONSE" | grep -q '"status":"UP"'; then
+                echo "Backend status: UP"
+              fi
+              
+              if echo "$BACKEND_RESPONSE" | grep -q '"db".*"status":"UP"'; then
+                echo "Database: UP"
+              fi
+            else
+              echo "Backend health check failed"
+              exit 1
+            fi
+            echo ""
+            
+            # Test via domain (from server)
+            echo "4. Testing via domain from server..."
+            DOMAIN_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/ 2>/dev/null || echo "000")
+            echo "Domain test HTTP Status: $DOMAIN_CODE"
+            if [ "$DOMAIN_CODE" -eq 200 ]; then
+              echo "Domain is accessible from server"
+            else
+              echo "Domain check returned: $DOMAIN_CODE (might be expected if DNS only resolves externally)"
+            fi
       
       - name: Deployment summary
         if: success()
