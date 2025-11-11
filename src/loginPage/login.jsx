@@ -63,7 +63,7 @@ function Login() {
 
           {/* Forgot password */}
           <div className="flex justify-end mb-6">
-            <a href="#" className="text-gray-300 text-sm font-medium hover:text-gray-200">
+            <a href="#" className="text-yellow-300 text-sm font-medium hover:text-red-500">
               Forgot Password?
             </a>
           </div>
