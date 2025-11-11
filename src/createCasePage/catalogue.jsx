@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./catalogue.css";
 
-import buttonImageA from './images/singleDoorA.jpg';
+import buttonImageA from './images/singledoorA.jpg';
 import buttonImageB from './images/singleDoorB.jpg';
 import buttonImageC from './images/singleDoorC.jpg';
 import buttonImageD from './images/singleDoorD.jpg';
