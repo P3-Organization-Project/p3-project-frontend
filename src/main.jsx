@@ -14,8 +14,6 @@ import Orderoverview from './createCasePage/orderoverview.jsx'
 import Door from './doorPage/door.jsx'
 import Team from './teamPage/team.jsx'
 
-
-
 const router = createBrowserRouter([{
     path: '/', element: <Login />,},
     {path: '/dashboard', element: <Dashboard />,},
