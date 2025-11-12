@@ -1,5 +1,6 @@
-import React, { useState } from "react";
 import "./catalogue.css";
+import React, {useEffect, useState} from "react";
+import usePersistentForm from "../persistentForm.js";
 
 import buttonImageA from './images/singledoorA.jpg';
 import buttonImageB from './images/singleDoorB.jpg';
@@ -8,23 +9,26 @@ import buttonImageD from './images/singleDoorD.jpg';
 import buttonImageE from './images/singleDoorE.jpg';
 import buttonImageF from './images/singleDoorF.jpg';
 
-import doubleDoorImageA from './images/doubleDoorA.jpg';
-import doubleDoorImageB from './images/doubleDoorB.jpg';
-import doubleDoorImageC from './images/doubleDoorC.jpg';
-import doubleDoorImageD from './images/doubleDoorD.jpg';
-import doubleDoorImageE from './images/doubleDoorE.jpg';
-import doubleDoorImageF from './images/doubleDoorF.jpg';
-
 import overgaardLogo from './images/overgaardwoodlogo.jpg';
 
 import { useNavigate } from "react-router-dom";
 
 function Catalogue() {
-  const navigate = useNavigate();
   const [selectedDoor, setSelectedDoor] = useState(null);
   const [selectedTab, setSelectedTab] = useState("single");
-  const [accountOpen, setAccountOpen] = useState(false); 
+  const [accountOpen, setAccountOpen] = useState(false);
 
+  const [formData, setFormData] = usePersistentForm("createCaseForm", {
+    klientNavn: "",
+    klientMail: "",
+    klientNummer: "",
+    klientAdresse: ""
+  });
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({prev, [field]: value }));
+  };
+
+  const navigate = useNavigate();
   const goTo = (path) => () => navigate(path);
 
   const singleDoors = [
@@ -168,6 +172,8 @@ function Catalogue() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientNavn}
+                  onChange={(e) => handleChange("klientNavn", e.target.value)}
                   id="clientName"
                   placeholder="Klient Navn"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -180,6 +186,8 @@ function Catalogue() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientMail}
+                  onChange={(e) => handleChange("klientMail", e.target.value)}
                   id="clientEmail"
                   placeholder="Klient@Mail.com"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -192,6 +200,8 @@ function Catalogue() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientNummer}
+                  onChange={(e) => handleChange("klientNummer", e.target.value)}
                   id="clientNumber"
                   placeholder="Telefon (optional) +45"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -204,6 +214,8 @@ function Catalogue() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientAdresse}
+                  onChange={(e) => handleChange("klientAdresse", e.target.value)}
                   id="clientAddress"
                   placeholder="Adresse..."
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
