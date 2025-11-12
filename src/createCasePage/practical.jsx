@@ -1,44 +1,26 @@
-import './createcase.css'
-import { useNavigate } from 'react-router-dom'
-import { React } from "react";
-import { useState, useEffect } from "react";
-
+import './createcase.css';
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import usePersistentForm from "../persistentForm.js";
 import overgaardLogo from './images/overgaardwoodlogo.jpg';
 
-
 function Practical() {
-    const [hulmaalLength, setHulmaalLength] = useState("");
-    const [hulmaalWidth, setHulmaalWidth]= useState("");
-    const [fugeLuft, setFugeLuft] = useState("");
-    const [haengselSide, setHaengselSide] = useState("");
-    const [karmOffset, setKarmOffset] = useState({ minus: "", plus: "" });
-    const [antal, setAntal] = useState("");
-
-    //loads the existing input
-    useEffect(() => {
-        const saved = localStorage.getItem("practicalForm");
-        console.log("Loaded from localStorage:", saved);
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed.hulmaalLength) setHulmaalLength(parsed.hulmaalLength);
-            if (parsed.hulmaalWidth) setHulmaalWidth(parsed.hulmaalWidth);
-            if (parsed.fugeLuft) setFugeLuft(parsed.fugeLuft);
-            if (parsed.haengselSide) setHaengselSide(parsed.haengselSide);
-            if (parsed.karmOffset) setKarmOffset(parsed.karmOffset);
-            if (parsed.antal) setAntal(parsed.antal);
-        }
-    }, []);
-    //saves the existing input
-    useEffect(() => {
-        const data = { hulmaalLength, hulmaalWidth, fugeLuft, haengselSide, karmOffset, antal };
-        localStorage.setItem("practicalForm", JSON.stringify(data));
-    }, [hulmaalLength, hulmaalWidth, fugeLuft, haengselSide, karmOffset, antal]);
-
     const navigate = useNavigate();
+    const [accountOpen, setAccountOpen] = useState(false);
+
+    const [formData, setFormData] = usePersistentForm("createCaseForm", {
+        hulmaalLength: "", hulmaalWidth: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: ""
+    });
+
+    const handleChange = (field, value) => {
+        setFormData((prev) => ({...prev, [field]: value,
+        }));
+    };
+
 
     const goTo = (path) => () => navigate(path);
 
-    const [accountOpen, setAccountOpen] = useState(false);
+
 
     return(
     
@@ -147,6 +129,8 @@ function Practical() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientMail}
+                  onChange={(e) => handleChange("klientMail", e.target.value)}
                   id="clientEmail"
                   placeholder="Klient@Mail.com"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -159,6 +143,8 @@ function Practical() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientNummer}
+                  onChange={(e) => handleChange("klientNummer", e.target.value)}
                   id="clientNumber"
                   placeholder="Telefon (optional) +45"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -171,6 +157,8 @@ function Practical() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientAdresse}
+                  onChange={(e) => handleChange("klientAdresse", e.target.value)}
                   id="clientAddress"
                   placeholder="Adresse..."
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -199,8 +187,8 @@ function Practical() {
                             <td className="border px-4 py-2">
                                 <input
                                     type="text"
-                                    value={hulmaalLength}
-                                    onChange={(e) => setHulmaalLength(e.target.value)}
+                                    value={formData.hulmaalLength || ""}
+                                    onChange={(e) => handleChange("hulmaalLength", e.target.value)}
                                     placeholder=""
                                     className="w-full border border-gray-300 rounded px-2 py-1"
                                 />
@@ -208,8 +196,8 @@ function Practical() {
                             <td className="border px-4 py-2">
                                 <input
                                     type="text"
-                                    value={hulmaalWidth}
-                                    onChange={(e) => setHulmaalWidth(e.target.value)}
+                                    value={formData.hulmaalWidth || ""}
+                                    onChange={(e) => handleChange("hulmaalWidth", e.target.value)}
                                     placeholder=""
                                     className="w-full border border-gray-300 rounded px-2 py-1"
                                 />
@@ -228,8 +216,8 @@ function Practical() {
                             <input
                                 type="checkbox"
                                 className="w-5 h-5 mt-1"
-                                checked={fugeLuft === "5mm"}
-                                onChange={() => setFugeLuft(fugeLuft === "5mm" ? "" : "5mm")}
+                                checked={formData.fugeLuft === "5mm"}
+                                onChange={() => handleChange("fugeLuft", formData.fugeLuft === "5mm" ? "" : "5mm")}
                             />
                         </label>
                         <label className="flex flex-col items-center">
@@ -237,8 +225,8 @@ function Practical() {
                             <input
                                 type="checkbox"
                                 className="w-5 h-5 mt-1"
-                                checked={fugeLuft === "10mm"}
-                                onChange={() => setFugeLuft(fugeLuft === "10mm" ? "" : "10mm")}
+                                checked={formData.fugeLuft === "10mm"}
+                                onChange={() => handleChange("fugeLuft", formData.fugeLuft === "10mm" ? "" : "10mm")}
                             />
                         </label>
                     </div>
@@ -255,10 +243,8 @@ function Practical() {
                             <input
                                 type="checkbox"
                                 className="w-5 h-5 mt-2"
-                                checked={haengselSide === "venstre"}
-                                onChange={() =>
-                                    setHaengselSide(haengselSide === "venstre" ? "" : "venstre")
-                                }
+                                checked={formData.haengselSide === "venstre"}
+                                onChange={() => handleChange("haengselSide", formData.haengselSide === "venstre" ? "" : "venstre")}
                             />
                         </label>
                         <label className="flex flex-col items-center">
@@ -267,10 +253,8 @@ function Practical() {
                             <input
                                 type="checkbox"
                                 className="w-5 h-5 mt-2"
-                                checked={haengselSide === "hojre"}
-                                onChange={() =>
-                                    setHaengselSide(haengselSide === "hojre" ? "" : "hojre")
-                                }
+                                checked={formData.haengselSide === "hojre"}
+                                onChange={() => handleChange("haengselSide", formData.haengselSide === "hojre" ? "" : "hojre")}
                             />
                         </label>
                     </div>
@@ -294,8 +278,8 @@ function Practical() {
                     <h2 className="font-bold text-xl mb-2">Antal</h2>
                     <input
                         type="text"
-                        value={antal}
-                        onChange={(e) => setAntal(e.target.value)}
+                        value={formData.antal}
+                        onChange={(e) => handleChange("antal", e.target.value)}
                         placeholder="1, 2, 3 etc"
                         className="w-full border border-gray-300 rounded px-3 py-2"
                     />
@@ -306,7 +290,7 @@ function Practical() {
         {/* Bottom Buttons */}
         <button
             onClick={() => {
-                localStorage.removeItem("practicalForm");
+                localStorage.removeItem("createCaseForm");
                 goTo("/createcase")();
             }}
           className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
