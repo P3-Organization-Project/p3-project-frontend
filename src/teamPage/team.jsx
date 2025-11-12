@@ -1,12 +1,7 @@
 import React from "react";
-import './team.css'
-import { useNavigate } from 'react-router-dom'
+import './team.css';
 
-
-
-const Case = () => {
-
-
+const Team = () => {
 
     return (
         <div className="h-screen w-screen overflow-hidden bg-white">
@@ -16,7 +11,38 @@ const Case = () => {
                     <button className="team-create-btn"
                             type="submit">+ Create Seller
                     </button>
+                </div>
 
+                {/*  Seller overview section */}
+                <div className="team-summary">
+                    <div className="summary-item">
+                        <div className="summary-icon all">👥</div>
+                        <div>
+                            <p>Total Employees</p>
+                            <h3>8</h3>
+                        </div>
+                    </div>
+                    <div className="summary-item">
+                        <div className="summary-icon active">✅</div>
+                        <div>
+                            <p>Active</p>
+                            <h3>5</h3>
+                        </div>
+                    </div>
+                    <div className="summary-item">
+                        <div className="summary-icon leave">🕓</div>
+                        <div>
+                            <p>On Leave</p>
+                            <h3>2</h3>
+                        </div>
+                    </div>
+                    <div className="summary-item">
+                        <div className="summary-icon inactive">❌</div>
+                        <div>
+                            <p>Inactive</p>
+                            <h3>1</h3>
+                        </div>
+                    </div>
                 </div>
 
                 <table>
@@ -94,4 +120,4 @@ const Case = () => {
     );
 };
 
-export default Case;
+export default Team;
