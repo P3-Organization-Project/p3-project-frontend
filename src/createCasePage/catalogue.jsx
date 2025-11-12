@@ -8,6 +8,13 @@ import buttonImageC from './images/singleDoorC.jpg';
 import buttonImageD from './images/singleDoorD.jpg';
 import buttonImageE from './images/singleDoorE.jpg';
 import buttonImageF from './images/singleDoorF.jpg';
+import doubleDoorImageA from './images/doubleDoorA.jpg';
+import doubleDoorImageB from './images/doubleDoorB.jpg';
+import doubleDoorImageC from './images/doubleDoorC.jpg';
+import doubleDoorImageD from './images/doubleDoorD.jpg';
+import doubleDoorImageE from './images/doubleDoorE.jpg';
+import doubleDoorImageF from './images/doubleDoorF.jpg';
+
 
 import overgaardLogo from './images/overgaardwoodlogo.jpg';
 
