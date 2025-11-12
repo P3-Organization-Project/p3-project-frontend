@@ -117,6 +117,8 @@ function Practical() {
                 </label>
                 <input
                   type="text"
+                  value={formData.klientNavn}
+                  onChange={(e) => handleChange("klientNavn", e.target.value)}
                   id="clientName"
                   placeholder="Klient Navn"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -220,6 +222,7 @@ function Practical() {
                                 onChange={() => handleChange("fugeLuft", formData.fugeLuft === "5mm" ? "" : "5mm")}
                             />
                         </label>
+
                         <label className="flex flex-col items-center">
                             <span>10mm</span>
                             <input
@@ -229,6 +232,7 @@ function Practical() {
                                 onChange={() => handleChange("fugeLuft", formData.fugeLuft === "10mm" ? "" : "10mm")}
                             />
                         </label>
+
                     </div>
                 </section>
 
@@ -247,6 +251,7 @@ function Practical() {
                                 onChange={() => handleChange("haengselSide", formData.haengselSide === "venstre" ? "" : "venstre")}
                             />
                         </label>
+
                         <label className="flex flex-col items-center">
                             <span>Højre</span>
                             <div className="w-16 h-8 bg-gray-100 border border-black mt-1"></div>
@@ -257,6 +262,7 @@ function Practical() {
                                 onChange={() => handleChange("haengselSide", formData.haengselSide === "hojre" ? "" : "hojre")}
                             />
                         </label>
+
                     </div>
                 </section>
 
