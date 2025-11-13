@@ -1,6 +1,6 @@
 import "./catalogue.css";
 import React, {useEffect, useState} from "react";
-import usePersistentForm from "../persistentForm.js";
+import usePersistentForm from "../hooks/persistentForm.js";
 
 import buttonImageA from './images/singledoorA.jpg';
 import buttonImageB from './images/singleDoorB.jpg';
