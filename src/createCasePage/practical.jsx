@@ -1,12 +1,14 @@
 import './createcase.css';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
-import usePersistentForm from "../persistentForm.js";
+import usePersistentForm from "../hooks/persistentForm.js";
 import overgaardLogo from './images/overgaardwoodlogo.jpg';
+import CollapsibleSection from "../hooks/CollapsibleSection.jsx";
 
 function Practical() {
     const navigate = useNavigate();
     const [accountOpen, setAccountOpen] = useState(false);
+
 
     const [formData, setFormData] = usePersistentForm("createCaseForm", {
         hulmaalLength: "", hulmaalWidth: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: ""
@@ -175,7 +177,7 @@ function Practical() {
       <div className="flex-1 ml-64 overflow-y-auto p-10 relative">
             <div className="flex flex-col items-center justify-start min-h-screen w-full bg-white p-8 space-y-8">
                 {/* Hulmål Section */}
-                <section className="w-full max-w-md">
+                <CollapsibleSection title="hulmål" className="w-full max-w-md">
                     <h2 className="font-bold text-xl mb-2">Hulmål:</h2>
                     <table className="w-full border border-gray-300">
                         <thead className="bg-gray-100">
@@ -207,10 +209,10 @@ function Practical() {
                         </tr>
                         </tbody>
                     </table>
-                </section>
+                </CollapsibleSection>
 
                 {/* Fuge luft Section */}
-                <section className="w-full max-w-md">
+                <CollapsibleSection title="fuge luft" className="w-full max-w-md">
                     <h2 className="font-bold text-xl mb-2">Fuge luft:</h2>
                     <div className="flex gap-8 items-center">
                         <label className="flex flex-col items-center">
@@ -234,11 +236,11 @@ function Practical() {
                         </label>
 
                     </div>
-                </section>
+                </CollapsibleSection>
 
 
                 {/* Hængsel side Section */}
-                <section className="w-full max-w-md">
+                <CollapsibleSection title="hængselside" className="w-full max-w-md">
                     <h2 className="font-bold text-xl mb-2">Hængsel side:</h2>
                     <div className="flex justify-around items-center">
                         <label className="flex flex-col items-center">
@@ -264,10 +266,10 @@ function Practical() {
                         </label>
 
                     </div>
-                </section>
+                </CollapsibleSection>
 
                 {/* Karm Bredde Offset Section */}
-                <section className="w-full max-w-md">
+                <CollapsibleSection title="karm bredde offset" className="w-full max-w-md">
                     <h2 className="font-bold text-xl mb-2">Karm Bredde Offset:</h2>
                     <div className="flex justify-around items-center">
                         <div className="flex flex-col items-center">
@@ -277,10 +279,10 @@ function Practical() {
                             <div className="w-16 h-8 bg-gray-100 border border-black flex items-center justify-center">+</div>
                         </div>
                     </div>
-                </section>
+                </CollapsibleSection>
 
                 {/* Antal Section */}
-                <section className="w-full max-w-md">
+                <CollapsibleSection title="Antal" className="w-full max-w-md">
                     <h2 className="font-bold text-xl mb-2">Antal</h2>
                     <input
                         type="text"
@@ -289,7 +291,7 @@ function Practical() {
                         placeholder="1, 2, 3 etc"
                         className="w-full border border-gray-300 rounded px-3 py-2"
                     />
-                </section>
+                </CollapsibleSection>
             </div>
     </div>
 
