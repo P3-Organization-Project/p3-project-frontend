@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+    overscroll-behavior: none;
+}
+
+
 .dashboardButton {
   background-color: #8a8a8a;
   color: black;

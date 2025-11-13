@@ -2,7 +2,7 @@
 
 /* Layout */
 .catalogue-container {
-  display: flex;
+  overscroll-behavior-x: none;
   min-height: 100vh;
   min-width: 100vw;
   background: white;
@@ -11,7 +11,7 @@
 }
 
 .main-layout {
-  display: flex;
+  overscroll-behavior-x: contain;
   min-height: 100vh;
   min-width: 100vw;
   background: white;

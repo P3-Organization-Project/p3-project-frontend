@@ -54,7 +54,7 @@ function Login() {
             <button
               type="button"
               onClick={togglePassword}
-              className="absolute right-1 top-8.5 text-gray-800 text-xl hover:text-gray-300 transition bg-white bg-opacity-50"
+              className="eyetoggle absolute right-1 top-8.5 text-gray-300 text-xl hover:text-gray-300 transition bg-white"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -71,7 +71,7 @@ function Login() {
           {/* Login button */}
           <button
             onClick={goToDashboard}
-            className="w-full py-3 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 transition duration-200"
+            className="w-full py-3 bg-gray-800 text-black font-semibold rounded-md hover:bg-gray-700 transition duration-200"
           >
             Login
           </button>
