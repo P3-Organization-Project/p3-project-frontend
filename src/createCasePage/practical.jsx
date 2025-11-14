@@ -177,7 +177,7 @@ function Practical() {
       <div className="flex-1 overflow-y-auto p-10 relative">
             <div className="flex flex-col items-center justify-start min-h-screen w-full bg-white p-8 space-y-8">
                 {/* Hulmål Section */}
-                <CollapsibleSection title="hulmål" className="w-full max-w-md">
+                <CollapsibleSection title="Hulmål" className="w-full max-w-md">
                     <table className="w-full border border-gray-300">
                         <thead className="bg-gray-100">
                         <tr>
@@ -211,7 +211,7 @@ function Practical() {
                 </CollapsibleSection>
 
                 {/* Fuge luft Section */}
-                <CollapsibleSection title="fuge luft" className="w-full max-w-md">
+                <CollapsibleSection title="Fuge luft" className="w-full max-w-md">
                     <div className="flex gap-8 items-center">
                         <label className="flex flex-col items-center">
                             <span>5mm</span>
@@ -238,7 +238,7 @@ function Practical() {
 
 
                 {/* Hængsel side Section */}
-                <CollapsibleSection title="hængselside" className="w-full max-w-md">
+                <CollapsibleSection title="Hængselside" className="w-full max-w-md">
                     <div className="flex justify-around items-center">
                         <label className="flex flex-col items-center">
                             <span>Venstre</span>
@@ -266,7 +266,7 @@ function Practical() {
                 </CollapsibleSection>
 
                 {/* Karm Bredde Offset Section */}
-                <CollapsibleSection title="karm bredde offset" className="w-full max-w-md">
+                <CollapsibleSection title="Karm bredde offset" className="w-full max-w-md">
                     <table className="w-full border border-gray-300">
                         <thead className="bg-gray-100">
                         <tr>
@@ -311,8 +311,9 @@ function Practical() {
                                 onChange={(e) => handleChange("dørflade", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Dørflade-1">Dørflade valg 1</option>
-                                <option value="Dørflade-2">Dørflade valg 2</option>
+                                <option value="Dørflade-1">Eg</option>
+                                <option value="Dørflade-2">Douglas</option>
+                                <option value="dørflade-3">andet</option>
                             </select>
                         </div>
 
@@ -325,8 +326,10 @@ function Practical() {
                                 onChange={(e) => handleChange("dørkant", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Dørkant-1">Dørkant valg 1</option>
-                                <option value="Dørkant-2">Dørkant valg 2</option>
+                                <option value="dørkant-1">som dørflade</option>
+                                <option value="Dørkant-2">Eg</option>
+                                <option value="Dørkant-3">Douglas</option>
+                                <option value="dørkant-4">andet</option>
                             </select>
                         </div>
 
@@ -339,8 +342,9 @@ function Practical() {
                                 onChange={(e) => handleChange("karm", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Karm-1">Karm valg 1</option>
-                                <option value="Karm-2">Karm valg 2</option>
+                                <option value="Karm-1">som dørflade</option>
+                                <option value="Karm-2">Eg</option>
+                                <option value="karm-3">Duglas</option>
                             </select>
                         </div>
                     </div>
@@ -358,8 +362,10 @@ function Practical() {
                                 onChange={(e) => handleChange("udførsel", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Udførsel-1">Udførsel valg 1</option>
-                                <option value="Udførsel-2">Udførsel valg 2</option>
+                                <option value="Udførsel-1">Forskalling</option>
+                                <option value="Udførsel-2">Finér Bookmatched</option>
+                                <option value="Udførsel-3">Finér Kaotisk</option>
+
                             </select>
                         </div>
 
@@ -372,8 +378,10 @@ function Practical() {
                                 onChange={(e) => handleChange("naturlighed", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Naturlighed-1">Naturlighed valg 1</option>
-                                <option value="Naturlighed-2">Naturlighed valg 2</option>
+                                <option value="Naturlighed-1">Ren</option>
+                                <option value="Naturlighed-2">Naturlig Mild</option>
+                                <option value="Naturlighed-3">Naturlig Mellem</option>
+                                <option value="Naturlighed-4">Naturlig Høj</option>
                             </select>
                         </div>
 
@@ -386,8 +394,9 @@ function Practical() {
                                 onChange={(e) => handleChange("lappe farve", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Lappe Farve-1">Lappe Farve valg 1</option>
-                                <option value="Lappe Farve-2">Lappe Farve valg 2</option>
+                                <option value="Lappe Farve-1">Sort</option>
+                                <option value="Lappe Farve-2">Valnød</option>
+                                <option value="Lappe Farve-3">Snedkerens Valg</option>
                             </select>
                         </div>
 
@@ -400,8 +409,9 @@ function Practical() {
                                 onChange={(e) => handleChange("behandling", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Behandling-1">Behandling valg 1</option>
-                                <option value="Behandling-2">Behandling valg 2</option>
+                                <option value="Behandling-1">Pure</option>
+                                <option value="Behandling-2">Natural</option>
+                                <option value="Behandling-3">White 5%</option>
                             </select>
                         </div>
                     </div>
@@ -419,8 +429,9 @@ function Practical() {
                                 onChange={(e) => handleChange("hængsel", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Hængsel-1">Hængsel valg 1</option>
-                                <option value="Hængsel-2">Hængsel valg 2</option>
+                                <option value="Hængsel-1">Tectus TE 340 3D</option>
+                                <option value="Hængsel-2">Hamborghængsel</option>
+
                             </select>
                         </div>
 
@@ -433,8 +444,8 @@ function Practical() {
                                 onChange={(e) => handleChange("låsekasse", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Låsekasse-1">Låsekasse valg 1</option>
-                                <option value="Låsekasse-2">Låsekasse valg 2</option>
+                                <option value="Låsekasse-1">Boda 2014</option>
+                                <option value="Låsekasse-2">Arrone AR3313</option>
                             </select>
                         </div>
 
@@ -447,8 +458,8 @@ function Practical() {
                                 onChange={(e) => handleChange("tætningsbånd", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Tætningsbånd-1">Tætningsbånd valg 1</option>
-                                <option value="Tætningsbånd-2">Tætningsbånd valg 2</option>
+                                <option value="Tætningsbånd-1">Schall EX-L 15/30</option>
+                                <option value="Tætningsbånd-2">Bundstykke</option>
                             </select>
                         </div>
                     </div>
