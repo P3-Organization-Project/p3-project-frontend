@@ -6,7 +6,7 @@ function CollapsibleSection({ title, children }) {
     const toggleOpen = () => setOpen(!open);
 
     return (
-        <div className="w-full max-w-md mb-6 border border-gray-200 rounded-lg shadow-sm">
+        <div className="w-180 flex-w-md mb-6 border border-gray-200 rounded-lg shadow-sm">
             {/* Klikbar titel – ligner din oprindelige h2 */}
             <h2
                 onClick={toggleOpen}

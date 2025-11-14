@@ -11,7 +11,7 @@ function Practical() {
 
 
     const [formData, setFormData] = usePersistentForm("createCaseForm", {
-        hulmaalLength: "", hulmaalWidth: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: ""
+        hulmaalLength: "", hulmaalWidth: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
     });
 
     const handleChange = (field, value) => {
@@ -174,11 +174,10 @@ function Practical() {
       </div>
 
       {/*  Main Content */}
-      <div className="flex-1 ml-64 overflow-y-auto p-10 relative">
+      <div className="flex-1 overflow-y-auto p-10 relative">
             <div className="flex flex-col items-center justify-start min-h-screen w-full bg-white p-8 space-y-8">
                 {/* Hulmål Section */}
                 <CollapsibleSection title="hulmål" className="w-full max-w-md">
-                    <h2 className="font-bold text-xl mb-2">Hulmål:</h2>
                     <table className="w-full border border-gray-300">
                         <thead className="bg-gray-100">
                         <tr>
@@ -213,7 +212,6 @@ function Practical() {
 
                 {/* Fuge luft Section */}
                 <CollapsibleSection title="fuge luft" className="w-full max-w-md">
-                    <h2 className="font-bold text-xl mb-2">Fuge luft:</h2>
                     <div className="flex gap-8 items-center">
                         <label className="flex flex-col items-center">
                             <span>5mm</span>
@@ -241,7 +239,6 @@ function Practical() {
 
                 {/* Hængsel side Section */}
                 <CollapsibleSection title="hængselside" className="w-full max-w-md">
-                    <h2 className="font-bold text-xl mb-2">Hængsel side:</h2>
                     <div className="flex justify-around items-center">
                         <label className="flex flex-col items-center">
                             <span>Venstre</span>
@@ -270,25 +267,202 @@ function Practical() {
 
                 {/* Karm Bredde Offset Section */}
                 <CollapsibleSection title="karm bredde offset" className="w-full max-w-md">
-                    <h2 className="font-bold text-xl mb-2">Karm Bredde Offset:</h2>
-                    <div className="flex justify-around items-center">
-                        <div className="flex flex-col items-center">
-                            <div className="w-16 h-8 bg-gray-100 border border-black flex items-center justify-center">-</div>
+                    <table className="w-full border border-gray-300">
+                        <thead className="bg-gray-100">
+                        <tr>
+                            <th className="border px-4 py-2 text-left">minus</th>
+                            <th className="border px-4 py-2 text-left">plus</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td className="border px-4 py-2">
+                                <input
+                                    type="text"
+                                    value={formData.karmOffsetMinus || ""}
+                                    onChange={(e) => handleChange("karmOffsetMinus", e.target.value)}
+                                    placeholder="-"
+                                    className="w-full border border-gray-300 rounded px-2 py-1"
+                                />
+                            </td>
+                            <td className="border px-4 py-2">
+                                <input
+                                    type="text"
+                                    value={formData.karmOffsetPlus || ""}
+                                    onChange={(e) => handleChange("karmOffsetPlus", e.target.value)}
+                                    placeholder="+"
+                                    className="w-full border border-gray-300 rounded px-2 py-1"
+                                />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </CollapsibleSection>
+                {/* Træsort Section */}
+                <CollapsibleSection title="Træsort">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-4">
+                        {/* Dørflade */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Dørflade</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["dørflade"] || ""}
+                                onChange={(e) => handleChange("dørflade", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Dørflade-1">Dørflade valg 1</option>
+                                <option value="Dørflade-2">Dørflade valg 2</option>
+                            </select>
                         </div>
-                        <div className="flex flex-col items-center">
-                            <div className="w-16 h-8 bg-gray-100 border border-black flex items-center justify-center">+</div>
+
+                        {/* Dørkant */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Dørkant</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["dørkant"] || ""}
+                                onChange={(e) => handleChange("dørkant", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Dørkant-1">Dørkant valg 1</option>
+                                <option value="Dørkant-2">Dørkant valg 2</option>
+                            </select>
+                        </div>
+
+                        {/* Karm */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Karm</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["karm"] || ""}
+                                onChange={(e) => handleChange("karm", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Karm-1">Karm valg 1</option>
+                                <option value="Karm-2">Karm valg 2</option>
+                            </select>
                         </div>
                     </div>
                 </CollapsibleSection>
 
+                {/* Udseende Section */}
+                <CollapsibleSection title="Udseende">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 p-4">
+                        {/* Udførsel */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Udførsel</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["udførsel"] || ""}
+                                onChange={(e) => handleChange("udførsel", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Udførsel-1">Udførsel valg 1</option>
+                                <option value="Udførsel-2">Udførsel valg 2</option>
+                            </select>
+                        </div>
+
+                        {/* Naturlighed */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Naturlighed</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["naturlighed"] || ""}
+                                onChange={(e) => handleChange("naturlighed", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Naturlighed-1">Naturlighed valg 1</option>
+                                <option value="Naturlighed-2">Naturlighed valg 2</option>
+                            </select>
+                        </div>
+
+                        {/* Lappe Farve */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Lappe Farve</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["lappe farve"] || ""}
+                                onChange={(e) => handleChange("lappe farve", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Lappe Farve-1">Lappe Farve valg 1</option>
+                                <option value="Lappe Farve-2">Lappe Farve valg 2</option>
+                            </select>
+                        </div>
+
+                        {/* Behandling */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Behandling</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["behandling"] || ""}
+                                onChange={(e) => handleChange("behandling", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Behandling-1">Behandling valg 1</option>
+                                <option value="Behandling-2">Behandling valg 2</option>
+                            </select>
+                        </div>
+                    </div>
+                </CollapsibleSection>
+
+                {/* Hardware Section */}
+                <CollapsibleSection title="Hardware">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-4">
+                        {/* Hængsel */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Hængsel</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["hængsel"] || ""}
+                                onChange={(e) => handleChange("hængsel", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Hængsel-1">Hængsel valg 1</option>
+                                <option value="Hængsel-2">Hængsel valg 2</option>
+                            </select>
+                        </div>
+
+                        {/* Låsekasse */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Låsekasse</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["låsekasse"] || ""}
+                                onChange={(e) => handleChange("låsekasse", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Låsekasse-1">Låsekasse valg 1</option>
+                                <option value="Låsekasse-2">Låsekasse valg 2</option>
+                            </select>
+                        </div>
+
+                        {/* Tætningsbånd */}
+                        <div className="flex flex-col">
+                            <label className="font-semibold mb-2">Vælg Tætningsbånd</label>
+                            <select
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
+                                value={formData["tætningsbånd"] || ""}
+                                onChange={(e) => handleChange("tætningsbånd", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option value="Tætningsbånd-1">Tætningsbånd valg 1</option>
+                                <option value="Tætningsbånd-2">Tætningsbånd valg 2</option>
+                            </select>
+                        </div>
+                    </div>
+                </CollapsibleSection>
+
+
+
                 {/* Antal Section */}
                 <CollapsibleSection title="Antal" className="w-full max-w-md">
-                    <h2 className="font-bold text-xl mb-2">Antal</h2>
                     <input
                         type="text"
                         value={formData.antal}
                         onChange={(e) => handleChange("antal", e.target.value)}
-                        placeholder="1, 2, 3 etc"
+                        placeholder="1, 2, 3"
                         className="w-full border border-gray-300 rounded px-3 py-2"
                     />
                 </CollapsibleSection>
