@@ -101,7 +101,7 @@ jobs:
               echo "Cleaning up old backups..."
               echo "$OLD_BACKUPS" | xargs sudo rm -rf
             fi
-      
+
       - name: Test all endpoints from server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -114,8 +114,8 @@ jobs:
             
             # Test Nginx health (localhost)
             echo "1. Testing Nginx health endpoint (localhost)..."
-            NGINX_HEALTH=$(curl -s http://localhost/health)
-            NGINX_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/health)
+            NGINX_HEALTH=$(curl -s -k https://localhost/health)
+            NGINX_CODE=$(curl -s -k -o /dev/null -w "%{http_code}" https://localhost/health)
             echo "HTTP Status: $NGINX_CODE"
             echo "Response: $NGINX_HEALTH"
             if [ "$NGINX_CODE" -eq 200 ]; then
@@ -128,7 +128,7 @@ jobs:
             
             # Test frontend (localhost)
             echo "2. Testing frontend root (localhost)..."
-            FRONTEND_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+            FRONTEND_CODE=$(curl -s -k -o /dev/null -w "%{http_code}" https://localhost/)
             echo "HTTP Status: $FRONTEND_CODE"
             if [ "$FRONTEND_CODE" -eq 200 ]; then
               echo "Frontend is accessible"
@@ -140,8 +140,8 @@ jobs:
             
             # Test backend health through proxy (localhost)
             echo "3. Testing backend health through Nginx proxy (localhost)..."
-            BACKEND_RESPONSE=$(curl -s http://localhost/api/actuator/health)
-            BACKEND_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/actuator/health)
+            BACKEND_RESPONSE=$(curl -s -k https://localhost/api/actuator/health)
+            BACKEND_CODE=$(curl -s -k -o /dev/null -w "%{http_code}" https://localhost/api/actuator/health)
             echo "HTTP Status: $BACKEND_CODE"
             echo "Response:"
             echo "$BACKEND_RESPONSE" | jq '.' 2>/dev/null || echo "$BACKEND_RESPONSE"
@@ -164,14 +164,14 @@ jobs:
             
             # Test via domain (from server)
             echo "4. Testing via domain from server..."
-            DOMAIN_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_DOMAIN }}/ 2>/dev/null || echo "000")
+            DOMAIN_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.SERVER_DOMAIN }}/ 2>/dev/null || echo "000")
             echo "Domain test HTTP Status: $DOMAIN_CODE"
             if [ "$DOMAIN_CODE" -eq 200 ]; then
               echo "Domain is accessible from server"
             else
               echo "Domain check returned: $DOMAIN_CODE (might be expected if DNS only resolves externally)"
             fi
-      
+    
       - name: Deployment summary
         if: success()
         run: |
