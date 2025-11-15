@@ -21,6 +21,7 @@ html,
   background-color: #ffffff !important;
   color: #000000 !important;
   border-color: #e5e7eb !important;
+  overflow-x: hidden;
 }
 
 /* Prevent components from flipping colors in dark mode */
