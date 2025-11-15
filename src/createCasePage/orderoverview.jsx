@@ -1,3 +1,4 @@
+import "./catalogue.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import usePersistentForm from "../hooks/persistentForm.js";
@@ -72,21 +73,38 @@ function Orderoverview() {
   <div className="flex min-h-screen min-w-screen bg-white text-black">
 
       {showExitModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <h2>Afbryd uden at gemme?</h2>
-            <div className="modal-actions">
-              <button onClick={() => setShowExitModal(false)} className="modal-cancel-btn">Nej</button>
-              <button onClick={() => { localStorage.removeItem("createCaseForm"); goTo("/case")(); }} className="modal-save-btn">Ja</button>
-            </div>
+      <div className="fixed inset-0 !bg-black/40 flex items-center justify-center z-50">
+        <div className="backdrop-blur-xl !bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md border border-white/20">
+          <h2 className="text-xl font-semibold mb-4 text-white">
+            Afbryd uden at gemme?
+          </h2>
+
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setShowExitModal(false)}
+              className="px-4 py-2 bg-gray-200/60 text-black rounded hover:bg-gray-300/70"
+            >
+              Nej
+            </button>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("createCaseForm");
+                navigate("/dashboard");
+              }}
+              className="px-4 py-2 bg-blue-500/60 text-white rounded hover:bg-blue-600/70"
+            >
+              Ja
+            </button>
           </div>
         </div>
+      </div>
       )}
 
       {/* Top bar */}
       <div className="fixed top-0 left-0 w-full h-12 !bg-gray-500 shadow-md z-50 flex items-center justify-between px-6">
         <div className="flex items-center gap-2">
-          <button className="h-10 w-10" onClick={goTo("/dashboard")} style={{ backgroundImage: `url(${overgaardLogo})`, backgroundSize: "cover", backgroundPosition: "center" }}></button>
+          <button className="h-10 w-10" onClick={() => setShowExitModal(true)} style={{ backgroundImage: `url(${overgaardLogo})`, backgroundSize: "cover", backgroundPosition: "center" }}></button>
         </div>
         <div className="relative">
           <button onClick={() => setAccountOpen(!accountOpen)} className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-200 hover:bg-gray-300 transition">
