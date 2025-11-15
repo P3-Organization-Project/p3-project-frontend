@@ -1,181 +1,190 @@
-import './createcase.css';
-import { useNavigate } from 'react-router-dom';
+import "./catalogue.css";
 import React, { useState } from "react";
 import usePersistentForm from "../hooks/persistentForm.js";
-import overgaardLogo from './images/overgaardwoodlogo.jpg';
+
+import overgaardLogo from "./images/overgaardwoodlogo.jpg";
+import { useNavigate } from "react-router-dom";
 import CollapsibleSection from "../hooks/CollapsibleSection.jsx";
 
 function Practical() {
-    const navigate = useNavigate();
-    const [accountOpen, setAccountOpen] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(false);
+
+  const [formData, setFormData] = usePersistentForm("createCaseForm", {
+  hulmaalLength: "", hulmaalWidth: "",hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
+  });
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
 
-    const [formData, setFormData] = usePersistentForm("createCaseForm", {
-        hulmaalLength: "", hulmaalWidth: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
-    });
+  const navigate = useNavigate();
+  const [accountOpen, setAccountOpen] = useState(false);
+  const goTo = (path) => () => navigate(path);
 
-    const handleChange = (field, value) => {
-        setFormData((prev) => ({...prev, [field]: value,
-        }));
+  const [tempClient, setTempClient] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+  });
+
+  const handleTempClientInput = (e) => {
+    const { name, value } = e.target;
+    setTempClient((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveClient = () => {
+    const { name, email, phone, address } = tempClient;
+    if (!name || !email || !phone) {
+      alert("Udfyld venligst alle påkrævede felter!");
+      return;
+    }
+
+    handleChange("klientNavn", name);
+    handleChange("klientMail", email);
+    handleChange("klientNummer", phone);
+    handleChange("klientAdresse", address || "");
+
+    setShowClientModal(false);
+  };
+
+  const handleSelectExistingClient = (e) => {
+    const value = e.target.value;
+    if (!value) return;
+
+    const clients = {
+      "1": { name: "John Doe", email: "john@example.com", phone: "12345678", address: "Fake Street 1" },
+      "2": { name: "Jane Doe", email: "jane@example.com", phone: "87654321", address: "Fake Street 2" },
     };
 
+    const selected = clients[value];
+    handleChange("klientNavn", selected.name);
+    handleChange("klientMail", selected.email);
+    handleChange("klientNummer", selected.phone);
+    handleChange("klientAdresse", selected.address);
+  };
 
-    const goTo = (path) => () => navigate(path);
+  const handleResetClient = () => {
+    handleChange("klientNavn", "");
+    handleChange("klientMail", "");
+    handleChange("klientNummer", "");
+    handleChange("klientAdresse", "");
+  };
 
+  const handleEditClient = () => {
+    setTempClient({
+      name: formData.klientNavn,
+      email: formData.klientMail,
+      phone: formData.klientNummer,
+      address: formData.klientAdresse,
+    });
+    setShowClientModal(true);
+  };
 
+  const hasClient = formData.klientNavn && formData.klientMail && formData.klientNummer;
 
-    return(
-    
-    <div className="flex min-h-screen min-w-screen bg-white text-black padding-top-2">
-      <div className="flex min-h-screen min-w-screen bg-white text-black">
-      
-      {/*  Top bar  */}
-      <div className="fixed top-0 left-0 w-full h-12 bg-gray-700 shadow-md z-50 flex items-center justify-between px-6">
-        {/* Logo Left */}
-        <div className="flex items-center gap-2">
-          <button className=" h-10 w-10"
-          onClick={goTo("/dashboard")}
-          style={{
-                  backgroundImage: `url(${overgaardLogo})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}></button>
+  return (
+    <div className="flex min-h-screen min-w-screen bg-white text-black">
+
+      {showExitModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h2>Afbryd uden at gemme?</h2>
+            <div className="modal-actions">
+              <button onClick={() => setShowExitModal(false)} className="modal-cancel-btn">Nej</button>
+              <button onClick={() => { localStorage.removeItem("createCaseForm"); goTo("/case")(); }} className="modal-save-btn">Ja</button>
+            </div>
+          </div>
         </div>
-        {/* Account Icon */}
-        <div className="relative">
-          <button
-            onClick={() => setAccountOpen(!accountOpen)}
-            className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-200 hover:bg-gray-300 transition"
-          >
-            <span className="text-gray-200 font-bold">B</span> 
-          </button>
+      )}
 
-          {/* Dropdown */}
+      {/* Top bar */}
+      <div className="fixed top-0 left-0 w-full h-12 !bg-gray-500 shadow-md z-50 flex items-center justify-between px-6">
+        <div className="flex items-center gap-2">
+          <button className="h-10 w-10" onClick={goTo("/dashboard")} style={{ backgroundImage: `url(${overgaardLogo})`, backgroundSize: "cover", backgroundPosition: "center" }}></button>
+        </div>
+        <div className="relative">
+          <button onClick={() => setAccountOpen(!accountOpen)} className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-200 hover:bg-gray-300 transition">
+            <span className="text-gray-200 font-bold">B</span>
+          </button>
           {accountOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2 z-50">
-              <button
-                onClick={() => { /* add sign out logic */ }}
-                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-              >
-                Sign Out
-              </button>
-              <button
-                onClick={() => { /* navigate to account settings */ }}
-                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-              >
-                Administer Account
-              </button>
+              <button onClick={() => {}} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">Sign Out</button>
+              <button onClick={() => {}} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">Administer Account</button>
             </div>
           )}
         </div>
       </div>
 
-      {/*Fixed Left Sidebar*/}
-      <div className="mt-4 fixed top-15 left-0 h-190 w-64 bg-white shadow-md z-50 flex flex-col justify-between">
+      {/* Sidebar */}
+      <div className="mt-4 fixed top-15 left-0 h-190 w-64 bg-white shadow-md z-40 flex flex-col justify-between">
         <div className="flex flex-col h-full overflow-y-auto px-4 py-6">
-          
-          {/* Navigation Buttons */}
           <div className="flex flex-col gap-3 mb-6">
-            <button onClick={goTo("/catalogue")} className="ktlbtn px-4 py-2 bg-blue-500 rounded text-white font-medium hover:bg-blue-600 transition">
-              1: Dør Katalog
-            </button>
-            <button onClick={goTo("/practical")} className="prakbtn px-4 py-2 bg-gray-100 text-gray-400 rounded font-medium hover:bg-blue-100 hover:text-blue-600 transition">
-              2: Det Praktiske
-            </button>
-            <button onClick={goTo("/orderoverview")} className="oversigtbtn px-4 py-2 bg-gray-100 text-gray-400 rounded font-medium hover:bg-blue-100 hover:text-blue-600 transition">
-              3: Order Oversigt
-            </button>
+            <button onClick={goTo("/catalogue")} className="px-4 py-2 bg-blue-500 rounded text-white font-medium hover:bg-blue-600">1: Dør Katalog</button>
+            <button onClick={goTo("/practical")} className="px-4 py-2 bg-gray-100 text-gray-400 rounded font-medium hover:bg-blue-100 hover:text-blue-600">2: Det Praktiske</button>
+            <button onClick={goTo("/orderoverview")} className="px-4 py-2 bg-blue-500 rounded text-white font-medium hover:bg-blue-600">3: Order Oversigt</button>
           </div>
-
-          {/* Divider */}
           <div className="border-t border-gray-200 mb-5"></div>
 
           {/* Client Section */}
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 shadow-sm">
-
-            {/* Choose Client */}
-            <label className="text-base font-semibold text-gray-800 mb-3">
-              Vælg Klient *
-            </label>
-            <select
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            >
-              <option value="">Vælg et Klient...</option>
-              <option value="1">John Doe</option>
-              <option value="2">Jane Doe</option>
-            </select>
-
-            <button
-              className="w-full bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-md mb-4 hover:bg-blue-600 transition"
-            >
-              + Ny Klient
-            </button>
-
-            {/* Client Info */}
-            <div className="space-y-3">
-              <div>
-                <label htmlFor="clientName" className="block text-sm text-gray-600 font-medium mb-1">
-                  
-                </label>
-                <input
-                  type="text"
-                  value={formData.klientNavn}
-                  onChange={(e) => handleChange("klientNavn", e.target.value)}
-                  id="clientName"
-                  placeholder="Klient Navn"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
+          <div className={`rounded-lg p-4 border shadow-sm ${!hasClient ? "client-warning" : "border-gray-200 bg-gray-50"}`}>
+            {!hasClient && (
+              <>
+                <label className="text-base font-semibold text-gray-800 mb-3 block">Vælg Klient *</label>
+                <select onChange={handleSelectExistingClient} className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 mb-3">
+                  <option value="">Vælg et Klient...</option>
+                  <option value="1">John Doe</option>
+                  <option value="2">Jane Doe</option>
+                </select>
+                <button className="w-full bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-md mb-4 hover:bg-blue-600" onClick={() => { setTempClient({name:"",email:"",phone:"",address:""}); setShowClientModal(true); }}>+ Ny Klient</button>
+                <p className="!text-red-600 font-medium">* Vælg venligst en klient for at fortsætte</p>
+              </>
+            )}
+            {hasClient && (
+              <div className="bg-white rounded-md border p-3 mt-3">
+                <h3 className="font-semibold text-gray-800 mb-2">Klientoplysninger</h3>
+                <p><strong>Navn:</strong> <input value={formData.klientNavn} onChange={(e) => handleChange("klientNavn", e.target.value)} /></p>
+                <p><strong>Email:</strong> <input value={formData.klientMail} onChange={(e) => handleChange("klientMail", e.target.value)} /></p>
+                <p><strong>Telefon:</strong> <input value={formData.klientNummer} onChange={(e) => handleChange("klientNummer", e.target.value)} /></p>
+                <p><strong>Adresse:</strong> <input value={formData.klientAdresse} onChange={(e) => handleChange("klientAdresse", e.target.value)} /></p>
+                <div className="flex justify-center gap-2 mt-3">
+                  <button className="text-gray-400 text-xs underline hover:text-gray-600 transition" onClick={handleResetClient}>Skift</button>
+                  <button className="text-gray-400 text-xs underline hover:text-gray-600 transition" onClick={handleEditClient}>Rediger</button>
+                </div>
               </div>
-
-              <div>
-                <label htmlFor="clientEmail" className="block text-sm text-gray-600 font-medium mb-1">
-                  
-                </label>
-                <input
-                  type="text"
-                  value={formData.klientMail}
-                  onChange={(e) => handleChange("klientMail", e.target.value)}
-                  id="clientEmail"
-                  placeholder="Klient@Mail.com"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="clientNumber" className="block text-sm text-gray-600 font-medium mb-1">
-                  
-                </label>
-                <input
-                  type="text"
-                  value={formData.klientNummer}
-                  onChange={(e) => handleChange("klientNummer", e.target.value)}
-                  id="clientNumber"
-                  placeholder="Telefon (optional) +45"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="clientAddress" className="block text-sm text-gray-600 font-medium mb-1">
-                  
-                </label>
-                <input
-                  type="text"
-                  value={formData.klientAdresse}
-                  onChange={(e) => handleChange("klientAdresse", e.target.value)}
-                  id="clientAddress"
-                  placeholder="Adresse..."
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
 
+      {/* Client Modal */}
+      {showClientModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h2>Klientoplysninger</h2>
+            <label>Navn *</label>
+            <input type="text" name="name" value={tempClient.name} onChange={handleTempClientInput} />
+            <label>Email *</label>
+            <input type="email" name="email" value={tempClient.email} onChange={handleTempClientInput} />
+            <label>Telefon *</label>
+            <input type="tel" name="phone" value={tempClient.phone} onChange={handleTempClientInput} />
+            <label>Adresse</label>
+            <input type="text" name="address" value={tempClient.address} onChange={handleTempClientInput} />
+            <div className="modal-actions">
+              <button onClick={() => setShowClientModal(false)} className="modal-cancel-btn">Afbryd</button>
+              <button onClick={handleSaveClient} className="modal-save-btn">Gem Klient</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/*  Main Content */}
-      <div className="flex-1 overflow-y-auto p-10 relative">
-            <div className="flex flex-col items-center justify-start min-h-screen w-full bg-white p-8 space-y-8">
+      <div className="ml-0 md:ml-64 mt-12 p-4 md:p-10 flex flex-col min-h-screen overflow-y-auto">
+            <div className="flex flex-col md:flex-row items-start min-h-screen w-full bg-white p-8 gap-8">
+                {/* Left side: collapsible sections */}
+                <div className="flex-1 flex flex-col space-y-8">
                 {/* Hulmål Section */}
                 <CollapsibleSection title="Hulmål" className="w-full max-w-md">
                     <table className="w-full border border-gray-300">
@@ -183,6 +192,7 @@ function Practical() {
                         <tr>
                             <th className="border px-4 py-2 text-left">Længde</th>
                             <th className="border px-4 py-2 text-left">Bredde</th>
+                            <th className="border px-4 py-2 text-left">Tykkelse</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -201,6 +211,15 @@ function Practical() {
                                     type="text"
                                     value={formData.hulmaalWidth || ""}
                                     onChange={(e) => handleChange("hulmaalWidth", e.target.value)}
+                                    placeholder=""
+                                    className="w-full border border-gray-300 rounded px-2 py-1"
+                                />
+                            </td>
+                            <td className="border px-4 py-2">
+                                <input
+                                    type="text"
+                                    value={formData.hulmaalThickness || ""}
+                                    onChange={(e) => handleChange("hulmaalThickness", e.target.value)}
                                     placeholder=""
                                     className="w-full border border-gray-300 rounded px-2 py-1"
                                 />
@@ -270,8 +289,8 @@ function Practical() {
                     <table className="w-full border border-gray-300">
                         <thead className="bg-gray-100">
                         <tr>
-                            <th className="border px-4 py-2 text-left">minus</th>
-                            <th className="border px-4 py-2 text-left">plus</th>
+                            <th className="border px-4 py-2 text-left">Minus</th>
+                            <th className="border px-4 py-2 text-left">Plus</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -311,9 +330,9 @@ function Practical() {
                                 onChange={(e) => handleChange("dørflade", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Dørflade-1">Eg</option>
-                                <option value="Dørflade-2">Douglas</option>
-                                <option value="dørflade-3">andet</option>
+                                <option value="Eg">Eg</option>
+                                <option value="Douglas">Douglas</option>
+                                <option value="Andet">Andet</option>
                             </select>
                         </div>
 
@@ -326,10 +345,10 @@ function Practical() {
                                 onChange={(e) => handleChange("dørkant", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="dørkant-1">som dørflade</option>
-                                <option value="Dørkant-2">Eg</option>
-                                <option value="Dørkant-3">Douglas</option>
-                                <option value="dørkant-4">andet</option>
+                                <option value="Som dørflade">Som dørflade</option>
+                                <option value="Eg">Eg</option>
+                                <option value="Douglas">Douglas</option>
+                                <option value="andet">Andet</option>
                             </select>
                         </div>
 
@@ -342,9 +361,9 @@ function Practical() {
                                 onChange={(e) => handleChange("karm", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Karm-1">som dørflade</option>
-                                <option value="Karm-2">Eg</option>
-                                <option value="karm-3">Duglas</option>
+                                <option value="Som dørflade">Som dørflade</option>
+                                <option value="Eg">Eg</option>
+                                <option value="Duglas">Duglas</option>
                             </select>
                         </div>
                     </div>
@@ -362,9 +381,9 @@ function Practical() {
                                 onChange={(e) => handleChange("udførsel", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Udførsel-1">Forskalling</option>
-                                <option value="Udførsel-2">Finér Bookmatched</option>
-                                <option value="Udførsel-3">Finér Kaotisk</option>
+                                <option value="Forskalling">Forskalling</option>
+                                <option value="Finér: Bookmatched">Finér: Bookmatched</option>
+                                <option value="Finér: Kaotisk">Finér: Kaotisk</option>
 
                             </select>
                         </div>
@@ -378,10 +397,10 @@ function Practical() {
                                 onChange={(e) => handleChange("naturlighed", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Naturlighed-1">Ren</option>
-                                <option value="Naturlighed-2">Naturlig Mild</option>
-                                <option value="Naturlighed-3">Naturlig Mellem</option>
-                                <option value="Naturlighed-4">Naturlig Høj</option>
+                                <option value="Ren">Ren</option>
+                                <option value="Naturlig: Mild">Naturlig: Mild</option>
+                                <option value="Naturlig: Mellem">Naturlig: Mellem</option>
+                                <option value="Naturlig: Høj">Naturlig: Høj</option>
                             </select>
                         </div>
 
@@ -394,9 +413,9 @@ function Practical() {
                                 onChange={(e) => handleChange("lappe farve", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Lappe Farve-1">Sort</option>
-                                <option value="Lappe Farve-2">Valnød</option>
-                                <option value="Lappe Farve-3">Snedkerens Valg</option>
+                                <option value="Sort">Sort</option>
+                                <option value="Valnød">Valnød</option>
+                                <option value="Snedkerens Valg">Snedkerens Valg</option>
                             </select>
                         </div>
 
@@ -409,9 +428,9 @@ function Practical() {
                                 onChange={(e) => handleChange("behandling", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Behandling-1">Pure</option>
-                                <option value="Behandling-2">Natural</option>
-                                <option value="Behandling-3">White 5%</option>
+                                <option value="Pure">Pure</option>
+                                <option value="Natural">Natural</option>
+                                <option value="White 5%">White 5%</option>
                             </select>
                         </div>
                     </div>
@@ -429,8 +448,8 @@ function Practical() {
                                 onChange={(e) => handleChange("hængsel", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Hængsel-1">Tectus TE 340 3D</option>
-                                <option value="Hængsel-2">Hamborghængsel</option>
+                                <option value="Tectus TE 340 3D">Tectus TE 340 3D</option>
+                                <option value="Hamborghængsel">Hamborghængsel</option>
 
                             </select>
                         </div>
@@ -444,8 +463,8 @@ function Practical() {
                                 onChange={(e) => handleChange("låsekasse", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Låsekasse-1">Boda 2014</option>
-                                <option value="Låsekasse-2">Arrone AR3313</option>
+                                <option value="Boda 2014">Boda 2014</option>
+                                <option value="Arrone AR3313">Arrone AR3313</option>
                             </select>
                         </div>
 
@@ -458,8 +477,8 @@ function Practical() {
                                 onChange={(e) => handleChange("tætningsbånd", e.target.value)}
                             >
                                 <option value="">-------</option>
-                                <option value="Tætningsbånd-1">Schall EX-L 15/30</option>
-                                <option value="Tætningsbånd-2">Bundstykke</option>
+                                <option value="Schall EX-L 15/30">Schall EX-L 15/30</option>
+                                <option value="Bundstykke">Bundstykke</option>
                             </select>
                         </div>
                     </div>
@@ -478,28 +497,35 @@ function Practical() {
                     />
                 </CollapsibleSection>
             </div>
+            {/* Right side: selected door */}
+            {formData.selectedDoor && (
+              <div className="w-full md:w-1/3 flex justify-center items-start sticky top-20">
+                <img
+                  src={formData.selectedDoor}
+                  alt="Valgt Dør"
+                  className="w-full h-auto rounded shadow-md"
+                />
+              </div>
+            )}
     </div>
-
+    </div>
         {/* Bottom Buttons */}
+        <button onClick={goTo("/catalogue")} className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow">Tilbage</button>
+
         <button
-            onClick={() => {
-                localStorage.removeItem("createCaseForm");
-                goTo("/createcase")();
-            }}
-          className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
-        >
-          Afbryd
-        </button>
-        <button
-          onClick={goTo("/practical")}
-          className="fixed bottom-4 right-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
+          onClick={goTo("/orderoverview")}
+          disabled={!hasClient}
+          className={`fixed bottom-4 right-4 px-6 py-3 rounded shadow transition ${
+            hasClient
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "!bg-gray-300 !text-gray-400 c!ursor-not-allowed !button-pulse !button-shake"
+          }`}
         >
           Næste
         </button>
-
       </div>
-    </div>
   );
 }
 
 export default Practical;
+

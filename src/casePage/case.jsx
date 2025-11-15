@@ -17,7 +17,7 @@ const Case = () => {
                 <div className="header-actions">
                     <h1>📁 My Cases</h1>
                     <button className="case-create-btn"
-                            onClick={goTo("/createCase")}
+                            onClick={goTo("/catalogue")}
                             type="submit">+ Create Case
                     </button>
 

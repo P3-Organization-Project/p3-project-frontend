@@ -18,7 +18,7 @@
           <div className="flex min-h-screen min-w-screen bg-white text-black">
           
           {/*  Top bar  */}
-          <div className="fixed top-0 left-0 w-full h-12 bg-gray-700 shadow-md z-50 flex items-center justify-between px-6">
+          <div className="fixed top-0 left-0 w-full h-12 !bg-gray-500 shadow-md z-50 flex items-center justify-between px-6">
             {/* Logo Left */}
             <div className="flex items-center gap-2">
               <button className=" h-10 w-10"
@@ -64,7 +64,7 @@
                     <button onClick={goTo("/case")}className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Cases</button>
                     <button onClick={goTo("/client")} className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Klient</button>
                     <button onClick={goTo("/materiel")} className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Materialer</button>
-                    <button onClick={goTo("/createCase")} className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Opret Case</button>
+                    <button onClick={goTo("/catalogue")} className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Opret Case</button>
                     <button onClick={goTo("/door")} className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Dør</button>
                     <button onClick={goTo("/team")} className="dashboardButton text-white font-semibold text-xl px-10 py-5 h-30 rounded-xl w-full sm:w-auto shadow-md transition-transform hover:scale-105">Teamet</button>
             </div>
