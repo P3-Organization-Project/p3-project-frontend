@@ -67,7 +67,7 @@ function Orderoverview() {
         ],
       },
     };
-
+    const placeholderPrice = "12.345 kr";
 
   return (
   <div className="flex min-h-screen min-w-screen bg-white text-black">
@@ -185,6 +185,16 @@ function Orderoverview() {
             </div>
           );
         })}
+        {/* Pricing Placeholder */}
+        <div className="mb-6 p-8 border rounded bg-gray-100 w-full">
+          <h2 className="font-bold text-2xl mb-6 border-b bg-gray-100 pb-2 text-center underline decoration-2 decoration-black">
+            Pris
+          </h2>
+
+          <div className="text-center bg-gray-100 text-xl font-semibold">
+            {placeholderPrice}
+          </div>
+        </div>
       </div>
     </div>
   </div>
