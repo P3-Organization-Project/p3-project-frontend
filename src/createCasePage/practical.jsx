@@ -3,15 +3,19 @@ import React, { useState } from "react";
 import usePersistentForm from "../hooks/persistentForm.js";
 
 import overgaardLogo from "./images/overgaardwoodlogo.jpg";
+import rightHingeside from "./images/rightHingeside.png";
+import leftHingeside from "./images/leftHingeside.png";
+
 import { useNavigate } from "react-router-dom";
 import CollapsibleSection from "../hooks/CollapsibleSection.jsx";
+import backgroundImage from "../loginPage/assets/LoginPageBackground.jpg";
 
 function Practical() {
   const [showExitModal, setShowExitModal] = useState(false);
   const [showClientModal, setShowClientModal] = useState(false);
 
   const [formData, setFormData] = usePersistentForm("createCaseForm", {
-  hulmaalLength: "", hulmaalWidth: "",hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
+  hulmaalLength: "", hulmaalWidth: "",hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "", note: "",
   });
 
   const handleChange = (field, value) => {
@@ -343,7 +347,9 @@ function Practical() {
                     <div className="flex justify-around items-center">
                         <label className="flex flex-col items-center">
                             <span>Venstre</span>
-                            <div className="w-16 h-8 bg-gray-100 border border-black mt-1"></div>
+                            <div
+                                style={{ backgroundImage: `url(${leftHingeside})`}}
+                                className="w-64 h-19 bg-gray-100 border border-black mt-1"></div>
                             <input
                                 type="checkbox"
                                 className="w-5 h-5 mt-2"
@@ -354,7 +360,9 @@ function Practical() {
 
                         <label className="flex flex-col items-center">
                             <span>Højre</span>
-                            <div className="w-16 h-8 bg-gray-100 border border-black mt-1"></div>
+                            <div
+                                style={{ backgroundImage: `url(${rightHingeside})`}}
+                                className="w-64 h-19 bg-gray-100 border border-black mt-1"></div>
                             <input
                                 type="checkbox"
                                 className="w-5 h-5 mt-2"
@@ -578,6 +586,15 @@ function Practical() {
                         className="w-full border border-gray-300 rounded px-3 py-2"
                     />
                 </CollapsibleSection>
+                    <CollapsibleSection title="Note" className="w-full max-w-md">
+                        <input
+                            type="text"
+                            value={formData.note}
+                            onChange={(e) => handleChange("note", e.target.value)}
+                            placeholder=""
+                            className="w-full border border-gray-300 rounded px-3 py-2"
+                        />
+                    </CollapsibleSection>
             </div>
             {/* Right side: selected door */}
             {formData.selectedDoor && (
