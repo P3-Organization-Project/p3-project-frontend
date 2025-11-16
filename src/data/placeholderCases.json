@@ -1,0 +1,29 @@
+[
+  {
+    "id": "56842365",
+    "client": "Jan Skov",
+    "assigned": "Hans Marker",
+    "doorType": "Oak Single Door",
+    "date": "12/01/2025",
+    "status": "lead",
+    "price": "15.230 kr"
+  },
+  {
+    "id": "56842366",
+    "client": "Marie Jensen",
+    "assigned": "Lars Petersen",
+    "doorType": "Douglas Double Door",
+    "date": "10/01/2025",
+    "status": "performa",
+    "price": "28.450 kr"
+  },
+  {
+    "id": "56842367",
+    "client": "Peter Nielsen",
+    "assigned": "Anna Schmidt",
+    "doorType": "Oak Single Door",
+    "date": "08/01/2025",
+    "status": "finish",
+    "price": "12.890 kr"
+  }
+]

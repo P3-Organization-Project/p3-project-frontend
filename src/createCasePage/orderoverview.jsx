@@ -6,7 +6,7 @@ import overgaardLogo from "./images/overgaardwoodlogo.jpg";
 
 function Orderoverview() {
   const [showExitModal, setShowExitModal] = useState(false);
-  
+  const [selectedStatus, setSelectedStatus] = useState("lead");
     const [formData, setFormData] = usePersistentForm("createCaseForm", {
     hulmaalLength: "", hulmaalWidth: "", hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
     }); 
@@ -148,17 +148,16 @@ function Orderoverview() {
     <div className="bg-white p-10 space-y-8 shadow-lg rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-center underline">Order Oversigt</h1>
       {/* Låsekasse */}
-                        <div className="flex flex-col">
+                        <div className="flex flex-col mb-6">
                             <label className="!text-red-600 font-semibold mb-2">Vælg Status *</label>
                             <select
-                                className="bg-blue-600 text-white px-4 py-2"
-                                value={formData["status"] || ""}
-                                onChange={(e) => handleChange("status", e.target.value)}
+                                value={selectedStatus}
+                                onChange={(e) => setSelectedStatus(e.target.value)}
+                                className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
                             >
-                                <option value="">-------</option>
-                                <option className="status lead" value="Lead">Lead </option>
-                                <option className="status performa" value="Performa">Performa</option>
-                                <option className="status finish" value="Finish">Finish</option>
+                                <option value="lead">Lead</option>
+                                <option value="performa">Performa</option>
+                                <option value="finish">Finish</option>
                             </select>
                         </div>
 
@@ -231,12 +230,57 @@ function Orderoverview() {
         </button>
 
         <button
-          onClick={goTo("/case")}
+          onClick={() => {
+              // Get existing cases or initialize empty array
+              const existingCases = JSON.parse(localStorage.getItem("savedCases") || "[]");
+
+              // Check if we're editing an existing case
+              const editingCaseId = formData.caseId;
+              // Create new case object
+              if (editingCaseId) {
+                  // Update existing case
+                  const caseIndex = existingCases.findIndex(c => c.id === editingCaseId);
+                  if (caseIndex !== -1) {
+                      existingCases[caseIndex] = {
+                          ...existingCases[caseIndex],
+                          status: selectedStatus,
+                          client: formData.klientNavn,
+                          date: new Date().toLocaleDateString('da-DK').replace(/\./g, '/'),
+                          details: formData
+                      };
+                  }
+              } else {
+                  // Create new case
+                  //generate id
+                  const newCaseId = existingCases.length > 0
+                      ? Math.max(...existingCases.map(c => parseInt(c.id))) + 1
+                      : 56842365;
+
+                  existingCases.push({
+                      id: newCaseId.toString(),
+                      client: formData.klientNavn,
+                      assigned: "Hans Marker",
+                      doorType: "Custom Door",
+                      date: new Date().toLocaleDateString('da-DK').replace(/\./g, '/'),
+                      status: selectedStatus,
+                      price: placeholderPrice,
+                      details: formData
+                  });
+              }
+
+              // Add to cases array
+              localStorage.setItem("savedCases", JSON.stringify(existingCases));
+
+              // Clear the form
+              localStorage.removeItem("createCaseForm");
+
+              // Navigate to case page
+              navigate("/case");
+          }}
           className="fixed bottom-4 right-4 px-6 py-3 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
         >
           Bekræft og Opret
         </button>
-
         </div>
   );
 }

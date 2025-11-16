@@ -1,17 +1,24 @@
 import './Case.css'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import usePersistentForm from "../hooks/persistentForm.js";
 import overgaardLogo from "./images/overgaardwoodlogo.jpg";
+import placeholderCases from "../data/placeholderCases.json";
 
 function Case() {
-  const [showExitModal, setShowExitModal] = useState(false);
-  
+    const [showExitModal, setShowExitModal] = useState(false);
     const navigate = useNavigate();
+    const [formData, setFormData] = usePersistentForm("createCaseForm", {});
+
     const [accountOpen, setAccountOpen] = useState(false);
     const goTo = (path) => () => navigate(path);
+    const [cases, setCases] = useState([]);
 
-
+    useEffect(() => {
+        const savedCases = JSON.parse(localStorage.getItem("savedCases") || "[]");
+        // Merge placeholder cases with saved cases
+        setCases([...placeholderCases, ...savedCases]);
+    }, []);
   return (
   <div className="flex min-h-screen min-w-screen bg-white text-black">
 
@@ -39,90 +46,38 @@ function Case() {
                 <table className="case-table">
                     <thead>
                     <tr>
-                        <th>Case ID:</th>
-                        <th>Klient:</th>
-                        <th>Sagsbehandler:</th>
-                        <th>Dør Type:</th>
-                        <th>Dato:</th>
-                        <th>Status:</th>
-                        <th>Pris:</th>
+                        <th>Sags ID</th>
+                        <th>Klient</th>
+                        <th>Tildelt</th>
+                        <th>Dør Type</th>
+                        <th>Dato</th>
+                        <th>Status</th>
+                        <th>Pris</th>
                     </tr>
                     </thead>
-
                     <tbody>
-                    <tr>
-
-                        <td className="caseID">56842364</td>
-                        <td className="client">Ole Jensen</td>
-                        <td className="assigned">Hans Marker</td>
-                        <td className="doortype">Door Type A</td>
-                        <td>08/10/25</td>
-                        <td><span className="status performa">Performa</span></td>
-                        <td>7.000 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">66238965</td>
-                        <td className="client">Pia Kjærsgaard</td>
-                        <td className="assigned">Hans Marker</td>
-                        <td className="doortype">Door Type B</td>
-                        <td>12/10/25</td>
-                        <td><span className="status lead">Lead</span></td>
-                        <td>7.500 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">66842362</td>
-                        <td className="client">Lars Løkke</td>
-                        <td className="assigned">Rosa Nielsen</td>
-                        <td className="doortype">Door Type C</td>
-                        <td>06/12/25</td>
-                        <td><span className="status finish">Finish</span></td>
-                        <td>8.000 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">12345678</td>
-                        <td className="client">Anders Hemmingsen</td>
-                        <td className="assigned">Stine Petersen</td>
-                        <td className="doortype">Door Type D</td>
-                        <td>10/10/25</td>
-                        <td><span className="status performa">Performa</span></td>
-                        <td>8.250 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">21345678</td>
-                        <td className="client">Jacob Hermann</td>
-                        <td className="assigned">Stine Petersen</td>
-                        <td className="doortype">Door Type E</td>
-                        <td>17/10/25</td>
-                        <td><span className="status lead">Lead</span></td>
-                        <td>8.500 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">26842365</td>
-                        <td className="client">Peter Olsen</td>
-                        <td className="assigned">Hans Marker</td>
-                        <td className="doortype">Door Type F</td>
-                        <td>18/10/25</td>
-                        <td><span className="status performa">Performa</span></td>
-                        <td>6.000 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">36842361</td>
-                        <td className="client">Julie Pedersen</td>
-                        <td className="assigned">Hans Marker</td>
-                        <td className="doortype">Door Type G</td>
-                        <td>19/10/25</td>
-                        <td><span className="status performa">Performa</span></td>
-                        <td>4.000 DKK</td>
-                    </tr>
-                    <tr>
-                        <td className="caseID">76842305</td>
-                        <td className="client">Ida Sofie Nielsen</td>
-                        <td className="assigned">Hans Marker</td>
-                        <td className="doortype">Door Type H</td>
-                        <td>25/10/25</td>
-                        <td><span className="status finish">Finish</span></td>
-                        <td>6.500 DKK</td>
-                    </tr>
+                    {cases.map((caseItem) => (
+                        <tr key={caseItem.id}>
+                            <td
+                                className="caseID"
+                                onClick={() => {
+                                    setFormData({ ...caseItem.details, caseId: caseItem.id });
+                                    navigate("/orderoverview");
+                                }}
+                                style={{ cursor: "pointer" }}
+                            >
+                                {caseItem.id}
+                            </td>
+                            <td className="client">{caseItem.client}</td>
+                            <td>{caseItem.assigned}</td>
+                            <td>{caseItem.doorType}</td>
+                            <td>{caseItem.date}</td>
+                            <td>
+                                <span className={`status ${caseItem.status}`}>{caseItem.status}</span>
+                            </td>
+                            <td>{caseItem.price}</td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
