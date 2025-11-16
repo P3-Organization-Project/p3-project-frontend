@@ -148,7 +148,7 @@ function Catalogue() {
             <button
               onClick={() => {
                 localStorage.removeItem("createCaseForm");
-                navigate("/dashboard");
+                navigate("/case");
               }}
               className="px-4 py-2 bg-blue-500/60 text-white rounded hover:bg-blue-600/70"
             >
@@ -266,7 +266,7 @@ function Catalogue() {
               </div>
 
               <div>
-                <label className="block text-white/80 mb-1 font-medium">Adresse</label>
+                <label className="block text-white/80 mb-1 font-medium">Adresse *</label>
                 <input
                   type="text"
                   name="address"

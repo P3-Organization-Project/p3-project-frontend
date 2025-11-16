@@ -10,6 +10,10 @@ function Orderoverview() {
     const [formData, setFormData] = usePersistentForm("createCaseForm", {
     hulmaalLength: "", hulmaalWidth: "", hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
     }); 
+    
+    const handleChange = (field, value) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    };
   
     const navigate = useNavigate();
     const [accountOpen, setAccountOpen] = useState(false);
@@ -24,6 +28,7 @@ function Orderoverview() {
       karmOffsetMinus: "Karm Offset Minus",
       karmOffsetPlus: "Karm Offset Plus",
       antal: "Antal",
+      note: "Note",
       "tætningsbånd": "Tætningsbånd",
       dørflade: "Dørflade",
       dørkant: "Dørkant",
@@ -64,10 +69,12 @@ function Orderoverview() {
           "karmOffsetMinus",
           "karmOffsetPlus",
           "antal",
+          "note",
         ],
       },
     };
     const placeholderPrice = "12.345 kr";
+    
 
   return (
   <div className="flex min-h-screen min-w-screen bg-white text-black">
@@ -140,6 +147,20 @@ function Orderoverview() {
   <div className="w-full" style={{ maxWidth: 'calc(100% - 4rem)' }}>
     <div className="bg-white p-10 space-y-8 shadow-lg rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-center underline">Order Oversigt</h1>
+      {/* Låsekasse */}
+                        <div className="flex flex-col">
+                            <label className="!text-red-600 font-semibold mb-2">Vælg Status *</label>
+                            <select
+                                className="bg-blue-600 text-white px-4 py-2"
+                                value={formData["status"] || ""}
+                                onChange={(e) => handleChange("status", e.target.value)}
+                            >
+                                <option value="">-------</option>
+                                <option className="status lead" value="Lead">Lead </option>
+                                <option className="status performa" value="Performa">Performa</option>
+                                <option className="status finish" value="Finish">Finish</option>
+                            </select>
+                        </div>
 
       {/* Door Image */}
       {formData.selectedDoor && (

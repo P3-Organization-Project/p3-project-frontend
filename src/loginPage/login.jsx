@@ -12,6 +12,7 @@ function Login() {
   const goToDashboard = () => {
     navigate('/dashboard');
   };
+  const goTo = (path) => () => navigate(path);
 
   return (
     <div className="h-screen w-screen overflow-hidden">
@@ -70,7 +71,7 @@ function Login() {
 
           {/* Login button */}
           <button
-            onClick={goToDashboard}
+            onClick={goTo("/case")}
             className="w-full py-3 bg-gray-800 text-black font-semibold rounded-md hover:bg-gray-700 transition duration-200"
           >
             Login

@@ -9,31 +9,6 @@ h1 {
     color: black;
 }
 
-table {
-    color: black;
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-th, td {
-    text-align: left;
-    padding: 12px 16px;
-    font-size: 15px;
-}
-
-th {
-    background-color: #f3f4f6;
-    font-weight: 600;
-}
-
-tr:nth-child(even) {
-    background-color: #fafafa;
-}
-
 .status {
     color: black;
     padding: 4px 10px;
@@ -88,3 +63,95 @@ tr:nth-child(even) {
     border-radius: 6px;
     cursor: pointer;
 }
+
+.case-page {
+  margin-top: 4rem; 
+}
+
+/*Table Styling Upgrade*/
+
+table.case-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: visible;
+    color: #111;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+.case-table th {
+    text-align: left;                  
+    background: #e5ebf3 !important;               
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #d5d9df;  
+}
+
+
+.case-table td {
+    padding: 14px 18px;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* Even rows stay subtle */
+.case-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Hover magic */
+.case-table tbody tr {
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.case-table tbody tr:hover {
+    background-color: #e8f0ff !important; 
+    transform: translateX(3px);
+    cursor: pointer;
+}
+
+/* Status Badge Stuff */
+.status {
+    color: #111;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f7f7f7;
+}
+
+/* Colored Dot */
+.status::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* Colors */
+.status.lead::before {
+    background-color: #22c55e;
+}
+
+.status.performa::before {
+    background-color: #eab308;
+}
+
+.status.finish::before {
+    background-color: #ef4444;
+}
+
+/* Underlines for clickable cells */
+.caseID, .client {
+    text-decoration: underline;
+    font-weight: 500;
+}
+
