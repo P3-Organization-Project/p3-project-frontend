@@ -98,10 +98,10 @@ function Team ()  {
             {showSellerModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
                     <div className="bg-white rounded-lg p-6 w-96 shadow-lg flex flex-col gap-4">
-                        <h2 className="text-xl font-semibold">Seller Info</h2>
+                        <h2 className="text-xl font-semibold">Sælger Oplysninger</h2>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium">Name *</label>
+                            <label className="text-sm font-medium">Navn *</label>
                             <input
                                 type="text"
                                 name="name"
