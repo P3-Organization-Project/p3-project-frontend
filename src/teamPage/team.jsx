@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import './team.css';
 import overgaardLogo from "../casePage/images/overgaardwoodlogo.jpg";
 import { useNavigate } from 'react-router-dom'
+import usePersistentForm from "../hooks/persistentForm.js";
 
 
 function Team ()  {
@@ -12,8 +13,8 @@ function Team ()  {
     const [showSellerModal, setShowSellerModal] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
 
-    const [seller, setSeller] = useState({ name: "", email: "", password: "" });
-    const [sellers, setSellers] = useState([
+    const [seller, setSeller] = usePersistentForm("sellerform",{ name: "", email: "", password: "" });
+    const [sellers, setSellers] = usePersistentForm("sellerList",[
         { id: "56842364", name: "Ole Jensen", email: "OJ@overgaard.dk", password: "123", cases: 5, status: "Aktiv" },
         { id: "56842365", name: "Mette Hansen", email: "MH@overgaard.dk", password: "123", cases: 3, status: "På Orlov" },
         { id: "56842366", name: "Lars Nielsen", email: "LN@overgaard.dk", password: "123", cases: 1, status: "Inaktiv" },
@@ -96,7 +97,7 @@ function Team ()  {
 
             {/* Seller Modal */}
             {showSellerModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+                <div className="fixed inset-0 !bg-black/40 flex justify-center items-center z-50">
                     <div className="bg-white rounded-lg p-6 w-96 shadow-lg flex flex-col gap-4">
                         <h2 className="text-xl font-semibold">Sælger Oplysninger</h2>
 
@@ -157,7 +158,7 @@ function Team ()  {
             {/* Titel and Create button */}
             <div className="Team-page pt-12">
                 <div className="header-actions">
-                    <h1 className="text-2xl font-bold">📁 Team Oversigt  </h1>
+                    <h1 className="text-2xl font-bold overflow-hidden">📁 Team Oversigt  </h1>
                     <button className="text-white px-4 py-2 rounded !bg-blue-500"
                             onClick={() => setShowSellerModal(true)}>
                             + Opret Sælger
@@ -214,7 +215,7 @@ function Team ()  {
                             <th className="py-3 px-4 font-medium">User ID</th>
                             <th className="py-3 px-4 font-medium">Navn</th>
                             <th className="py-3 px-4 font-medium">Email</th>
-                            <th className="py-3 px-4 font-medium">Antal Case</th>
+                            <th className="py-3 px-4 font-medium">Antal Sager</th>
                             <th className="py-3 px-4 font-medium">Status</th>
                         </tr>
                         </thead>

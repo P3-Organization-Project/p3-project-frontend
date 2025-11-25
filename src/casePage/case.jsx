@@ -43,6 +43,7 @@ function Case() {
      {/* Main Content */}
     <div className="h-screen w-screen overflow-hidden bg-white">
             <div className="case-page">
+                <h1 className="text-2xl font-bold overflow-hidden">📁 Oversigt Over Sager </h1>
                 <table className="case-table">
                     <thead>
                     <tr>
