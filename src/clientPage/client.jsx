@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import overgaardLogo from "../createCasePage/images/overgaardwoodlogo.jpg";
 import placeholderClients from "../data/placeholderClients.json";
+import { useHealth } from "../hooks/useHealth";
 
 function Client() {
     const navigate = useNavigate();
     const [accountOpen, setAccountOpen] = useState(false);
     const [clients, setClients] = useState([]);
+    const { health, loading, error } = useHealth();
 
     useEffect(() => {
         const savedClients = JSON.parse(localStorage.getItem("savedClients") || "[]");
@@ -60,6 +62,14 @@ function Client() {
             {/* Main Content */}
             <div className="h-screen w-screen overflow-hidden bg-white">
                 <div className="client-page">
+                    {/* Health Check Display */}
+                    <div className="mb-4 p-4 bg-gray-100 border border-gray-300 rounded">
+                        <h3 className="font-bold mb-2">Backend Health Check:</h3>
+                        {loading && <p>Loading...</p>}
+                        {error && <p className="text-red-600">Error: {error}</p>}
+                        {health && <pre>{JSON.stringify(health, null, 2)}</pre>}
+                    </div>
+
                     <div className="flex items-center justify-between mb-6">
                         <h1 className="text-2xl font-bold">Oversigt Over Klienter</h1>
                         <button
