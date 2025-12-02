@@ -1,1 +1,54 @@
 @import "tailwindcss";
+
+.client-page {
+    margin-top: 4rem;
+}
+
+table.client-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: visible;
+    color: #111;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.2s;
+}
+
+.client-table th {
+    text-align: left;
+    background: #e5ebf3 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #d5d9df;
+}
+
+.client-table td {
+    padding: 14px 18px;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.client-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.client-table tbody tr {
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.client-table tbody tr:hover {
+    background-color: #e8f0ff !important;
+    transform: translateX(3px);
+    cursor: pointer;
+}
+
+.clientID,
+.clientName {
+    text-decoration: underline;
+    font-weight: 500;
+}
