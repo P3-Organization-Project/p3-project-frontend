@@ -27,4 +27,35 @@ api.interceptors.response.use(
     }
 );
 
+// Generic API service methods facade
+export const apiService = {
+    async get(url, config = {}) {
+        const response = await api.get(url, config);
+        return response.data;
+    },
+
+    async post(url, data, config = {}) {
+        const response = await api.post(url, data, config);
+        return response.data;
+    },
+
+    async put(url, data, config = {}) {
+        const response = await api.put(url, data, config);
+        return response.data;
+    },
+
+    async delete(url, config = {}) {
+        const response = await api.delete(url, config);
+        return response.data;
+    },
+
+    async download(url, config = {}) {
+        const response = await api.get(url, {
+            ...config,
+            responseType: 'blob'
+        });
+        return response.data;
+    }
+};
+
 export default api;

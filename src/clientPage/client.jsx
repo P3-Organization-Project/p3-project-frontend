@@ -3,17 +3,21 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import overgaardLogo from "../createCasePage/images/overgaardwoodlogo.jpg";
 import placeholderClients from "../data/placeholderClients.json";
-import { useHealth } from "../hooks/useHealth";
+import { useApi } from "../hooks/useAPI";
+import { healthCheckService } from "../api/services/healthCheckService";
 
 function Client() {
     const navigate = useNavigate();
     const [accountOpen, setAccountOpen] = useState(false);
     const [clients, setClients] = useState([]);
-    const { health, loading, error } = useHealth();
+    const { data: health, loading, error, execute: fetchHealth } = useApi(healthCheckService.getHealth);
 
     useEffect(() => {
         const savedClients = JSON.parse(localStorage.getItem("savedClients") || "[]");
         setClients([...placeholderClients, ...savedClients]);
+
+        // Fetch health check on component mount
+        fetchHealth();
     }, []);
 
     const goTo = (path) => () => navigate(path);

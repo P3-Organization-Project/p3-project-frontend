@@ -3,78 +3,81 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import usePersistentForm from "../hooks/persistentForm.js";
 import overgaardLogo from "./images/overgaardwoodlogo.jpg";
+import { caseService } from "../api/services/caseService";
+import { useApi } from "../hooks/useAPI";
 
 function Orderoverview() {
-  const [showExitModal, setShowExitModal] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("lead");
+    const [showExitModal, setShowExitModal] = useState(false);
+    const [selectedStatus, setSelectedStatus] = useState("lead");
+    const { execute: saveCase, loading: saving } = useApi(caseService.createCase);
+
     const [formData, setFormData] = usePersistentForm("createCaseForm", {
-    hulmaalLength: "", hulmaalWidth: "", hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
-    }); 
-    
+        hulmaalLength: "", hulmaalWidth: "", hulmaalThickness: "", fugeLuft: "", haengselSide: "", karmOffsetMinus: "", karmOffsetPlus: "", antal: "", klientNavn: "", klientNummer: "", klientMail: "", klientAdresse: "", "tætningsbånd": "",
+    });
+
     const handleChange = (field, value) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+        setFormData((prev) => ({ ...prev, [field]: value }));
     };
-  
+
     const navigate = useNavigate();
     const [accountOpen, setAccountOpen] = useState(false);
     const goTo = (path) => () => navigate(path);
 
     const fieldLabels = {
-      hulmaalLength: "Hulmål Længde",
-      hulmaalWidth: "Hulmål Bredde",
-      hulmaalThickness: "Hulmål Tykkelse",
-      fugeLuft: "Fuge luft",
-      haengselSide: "Hængselside",
-      karmOffsetMinus: "Karm Offset Minus",
-      karmOffsetPlus: "Karm Offset Plus",
-      antal: "Antal",
-      note: "Note",
-      "tætningsbånd": "Tætningsbånd",
-      dørflade: "Dørflade",
-      dørkant: "Dørkant",
-      udførsel: "Udførsel",
-      naturlighed: "Naturlighed",
-      "lappe farve": "Lappe farve",
-      behandling: "Behandling",
-      hængsel: "Hængsel",
-      låsekasse: "Låsekasse",
-      
+        hulmaalLength: "Hulmål Længde",
+        hulmaalWidth: "Hulmål Bredde",
+        hulmaalThickness: "Hulmål Tykkelse",
+        fugeLuft: "Fuge luft",
+        haengselSide: "Hængselside",
+        karmOffsetMinus: "Karm Offset Minus",
+        karmOffsetPlus: "Karm Offset Plus",
+        antal: "Antal",
+        note: "Note",
+        "tætningsbånd": "Tætningsbånd",
+        dørflade: "Dørflade",
+        dørkant: "Dørkant",
+        udførsel: "Udførsel",
+        naturlighed: "Naturlighed",
+        "lappe farve": "Lappe farve",
+        behandling: "Behandling",
+        hængsel: "Hængsel",
+        låsekasse: "Låsekasse",
+
     };
 
-      const groups = {
-      door: {
-        title: "Dørvalg:",
-        fields: [
-          "dørflade",
-          "udførsel",
-          "dørkant",
-          "karm",
-          "naturlighed",
-          "lappe farve",
-          "behandling",
-        ],
-      },
-      hardware: {
-        title: "Beslag & Hardware:",
-        fields: ["hængsel", "låsekasse", "tætningsbånd"],
-      },
-      practical: {
-        title: "Praktiske Mål:",
-        fields: [
-          "hulmaalLength",
-          "hulmaalWidth",
-          "hulmaalThickness",
-          "fugeLuft",
-          "haengselSide",
-          "karmOffsetMinus",
-          "karmOffsetPlus",
-          "antal",
-          "note",
-        ],
-      },
+    const groups = {
+        door: {
+            title: "Dørvalg:",
+            fields: [
+                "dørflade",
+                "udførsel",
+                "dørkant",
+                "karm",
+                "naturlighed",
+                "lappe farve",
+                "behandling",
+            ],
+        },
+        hardware: {
+            title: "Beslag & Hardware:",
+            fields: ["hængsel", "låsekasse", "tætningsbånd"],
+        },
+        practical: {
+            title: "Praktiske Mål:",
+            fields: [
+                "hulmaalLength",
+                "hulmaalWidth",
+                "hulmaalThickness",
+                "fugeLuft",
+                "haengselSide",
+                "karmOffsetMinus",
+                "karmOffsetPlus",
+                "antal",
+                "note",
+            ],
+        },
     };
     const placeholderPrice = "12.345 kr";
-    
 
   return (
   <div className="flex min-h-screen min-w-screen bg-white text-black">
@@ -136,8 +139,8 @@ function Orderoverview() {
           </div>
           <div className="border-t border-gray-200 mb-5"></div>
 
-      
-          
+
+
         </div>
       </div>
 
@@ -174,15 +177,15 @@ function Orderoverview() {
       )}
 
       {/* Client Information */}
-      <div className="mb-6 p-6 border rounded shadow-sm bg-gray-50">
-        <h2 className="font-bold text-2xl mb-6 border-b pb-2 text-center">Klientoplysninger</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <p><strong>Navn:</strong> {formData.klientNavn}</p>
-          <p><strong>Email:</strong> {formData.klientMail}</p>
-          <p><strong>Telefon:</strong> {formData.klientNummer}</p>
-          <p><strong>Adresse:</strong> {formData.klientAdresse}</p>
-        </div>
-      </div>
+       <div className="mb-6 p-6 border rounded shadow-sm bg-gray-50">
+         <h2 className="font-bold text-2xl mb-6 border-b pb-2 text-center">Klientoplysninger</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <p><strong>Navn:</strong> {formData.klientNavn || "Standard klient"}</p>
+                <p><strong>Email:</strong> {formData.klientMail || "-"}</p>
+                <p><strong>Telefon:</strong> {formData.klientNummer || "-"}</p>
+                <p><strong>Adresse:</strong> {formData.klientAdresse || "-"}</p>
+            </div>
+       </div>
 
       {/* Practical Information */}
       <div className="mb-6 p-8 border rounded shadow-lg bg-gray-50 w-full">
@@ -230,56 +233,54 @@ function Orderoverview() {
         </button>
 
         <button
-          onClick={() => {
-              // Get existing cases or initialize empty array
-              const existingCases = JSON.parse(localStorage.getItem("savedCases") || "[]");
+            onClick={async () => {
+                const clientName = formData.klientNavn || "Standard klient";
 
-              // Check if we're editing an existing case
-              const editingCaseId = formData.caseId;
-              // Create new case object
-              if (editingCaseId) {
-                  // Update existing case
-                  const caseIndex = existingCases.findIndex(c => c.id === editingCaseId);
-                  if (caseIndex !== -1) {
-                      existingCases[caseIndex] = {
-                          ...existingCases[caseIndex],
-                          status: selectedStatus,
-                          client: formData.klientNavn,
-                          date: new Date().toLocaleDateString('da-DK').replace(/\./g, '/'),
-                          details: formData
-                      };
-                  }
-              } else {
-                  // Create new case
-                  //generate id
-                  const newCaseId = existingCases.length > 0
-                      ? Math.max(...existingCases.map(c => parseInt(c.id))) + 1
-                      : 56842365;
+                const apiPayload = {
+                    customerId: 1,
+                    dealStatus: selectedStatus?.toUpperCase() || "LEAD",
+                    doorItems: [{
+                        height: parseFloat(formData.hulmaalLength) || 200.0,
+                        width: parseFloat(formData.hulmaalWidth) || 90.0,
+                        hingeSide: formData.haengselSide === "venstre" ? "LEFT" : formData.haengselSide === "hojre" ? "RIGHT" : "LEFT",
+                        openingDirection: "INWARD",
+                        materialCosts: [150.0, 80.0]
+                    }]
+                };
+                try {
+                    const result = await saveCase(apiPayload);
 
-                  existingCases.push({
-                      id: newCaseId.toString(),
-                      client: formData.klientNavn,
-                      assigned: "Hans Marker",
-                      doorType: "Custom Door",
-                      date: new Date().toLocaleDateString('da-DK').replace(/\./g, '/'),
-                      status: selectedStatus,
-                      price: placeholderPrice,
-                      details: formData
-                  });
-              }
+                    if (result.success) {
+                        const caseId = result.data?.caseId || result.data?.id || Date.now();
 
-              // Add to cases array
-              localStorage.setItem("savedCases", JSON.stringify(existingCases));
+                        // Store complete form data locally for rich display
+                        const savedCaseDetails = JSON.parse(localStorage.getItem("savedCaseDetails") || "{}");
+                        savedCaseDetails[caseId] = {
+                            clientName: clientName,
+                            clientEmail: formData.klientMail,
+                            clientPhone: formData.klientNummer,
+                            clientAddress: formData.klientAdresse,
+                            selectedDoor: formData.selectedDoor,
+                            doorType: formData.dørflade || "Custom Door",
+                            status: selectedStatus,
+                            formData: { ...formData },
+                            createdAt: new Date().toISOString()
+                        };
+                        localStorage.setItem("savedCaseDetails", JSON.stringify(savedCaseDetails));
 
-              // Clear the form
-              localStorage.removeItem("createCaseForm");
-
-              // Navigate to case page
-              navigate("/case");
-          }}
-          className="fixed bottom-4 right-4 px-6 py-3 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+                        localStorage.removeItem("createCaseForm");
+                        navigate("/case");
+                    } else {
+                        alert(`Failed to save: ${result.error}`);
+                    }
+                } catch (err) {
+                    alert(`Error: ${err.message}`);
+                }
+            }}
+            disabled={saving}
+            className="fixed bottom-4 right-4 px-6 py-3 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
         >
-          Bekræft og Opret
+            {saving ? "Gemmer..." : "Bekræft og Opret"}
         </button>
         </div>
   );
