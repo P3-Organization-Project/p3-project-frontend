@@ -117,7 +117,7 @@ function Case() {
                     {loading && <p className="text-gray-600">Indlæser sager...</p>}
                     {error && <p className="text-red-600">Fejl: {error}</p>}
 
-                    <h1 className="text-2xl font-bold overflow-hidden">📁 Oversigt Over Sager</h1>
+                    <h1 className="text-2xl font-bold overflow-hidden">Oversigt Over Sager</h1>
                     <table className="case-table">
                         <thead>
                         <tr>
