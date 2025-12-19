@@ -61,24 +61,24 @@ function Materiel() {
 
       {/* Main Content */}
       <div className="flex-1 items-center overflow-y-auto p-10 mt-16">
-        <h1 className="text-2xl font-semibold mb-6">Add New Material</h1>
+        <h1 className="text-2xl font-semibold mb-6">Tilføj Ny Materiale</h1>
 
         <form className="space-y-4 max-w-md">
           <div>
             <label htmlFor="materialName" className="block text-sm font-medium text-gray-700 mb-1">
-              Material Name
+              Materiale Navn
             </label>
             <input
               type="text"
               id="materialName"
-              placeholder="Enter material name"
+              placeholder="Indtast Materiale Navn"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
             <label htmlFor="materialType" className="block text-sm font-medium text-gray-700 mb-1">
-              Applicable Doors
+              Relevante Døre
             </label>
             <input
               type="text"
@@ -90,12 +90,12 @@ function Materiel() {
 
           <div>
             <label htmlFor="materialCost" className="block text-sm font-medium text-gray-700 mb-1">
-              Cost (DKK)
+              Pris (DKK)
             </label>
             <input
               type="number"
               id="materialCost"
-              placeholder="0.00"
+              placeholder="0.00 DKK"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -106,13 +106,13 @@ function Materiel() {
               onClick={goTo("/materiel")}
               className="px-6 py-2 bg-gray-200 rounded text-gray-700 hover:bg-gray-300 transition"
             >
-              Cancel
+              Afbryd
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 rounded text-white hover:bg-blue-700 transition"
+              className="px-6 py-2 !bg-blue-500 rounded text-white hover:bg-blue-700 transition"
             >
-              Save Material
+              Gem Materiale
             </button>
           </div>
         </form>
@@ -120,15 +120,15 @@ function Materiel() {
         <table class="table-fixed">
         <thead>
             <tr>
-            <th>Material</th>
-            <th>Doors Affected</th>
-            <th>Cost</th>
+            <th>Materiale</th>
+            <th>Relevante Døre</th>
+            <th>Pris</th>
             </tr>
         </thead>
         <tbody>
             <tr>
             <td>Wood</td>
-            <td>Door A. Door B, Door C</td>
+            <td>Door A, Door B, Door C</td>
             <td>2000</td>
             </tr>
             <tr>
