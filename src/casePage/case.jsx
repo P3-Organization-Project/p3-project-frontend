@@ -2,7 +2,6 @@ import './Case.css'
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import overgaardLogo from "./images/overgaardwoodlogo.jpg";
-import placeholderCases from "../data/placeholderCases.json";
 import { caseService } from "../api/services/caseService";
 import { useApi } from "../hooks/useAPI";
 
@@ -13,74 +12,68 @@ function Case() {
 
     const { data: apiCases, loading, error, execute: fetchCases } = useApi(caseService.getAllCases);
 
-    const userName = localStorage.getItem('userName') || 'Sælger';
-    const clientName = localStorage.getItem('clientName') || 'Standard klient';
+    // Get user info from stored user object (set during login)
+    const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+    const userName = user?.name || 'User';
 
-    const CaseWithLocalData = (apiCase) => {
-        const savedDetails = JSON.parse(localStorage.getItem("savedCaseDetails") || "{}");
-        const caseId = apiCase.caseId || apiCase.id;
-        const localData = savedDetails[caseId];
-        const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-
+    // Adapter: Transform backend response to display format
+    const mapCaseToDisplay = (apiCase) => {
         return {
-            id: caseId,
-            client: localData?.clientName || clientName,
-            assigned: user?.name || userName,
-            doorType: localData?.doorType || (apiCase.doorItems?.[0]
-                ? `${apiCase.doorItems[0].width}x${apiCase.doorItems[0].height}mm`
-                : "Custom Door"),
-            status: localData?.status || mapStatus(apiCase.dealStatus),
-            date: localData?.createdAt
-                ? new Date(localData.createdAt).toLocaleDateString('da-DK')
-                : new Date().toLocaleDateString('da-DK'),
-            price: calculatePrice(apiCase.doorItems),
-            details: apiCase,
-            localData: localData
+            id: apiCase.caseId,
+            client: apiCase.customerName,
+            assigned: apiCase.sellerName,
+            doorType: formatDoorType(apiCase.doorItems),
+            status: mapStatus(apiCase.dealStatus),
+            date: new Date(apiCase.createdDate).toLocaleDateString('da-DK'),
+            price: formatPrice(apiCase.totalPrice), // Direct from backend - no calculation needed
+            details: apiCase // Preserve full API response for navigation
         };
     };
 
+    // Map door configuration type to display string
+    const formatDoorType = (doorItems) => {
+        if (!doorItems || doorItems.length === 0) return "N/A";
+        const type = doorItems[0]?.doorConfiguration?.type;
+        const typeMap = {
+            'SINGLE': 'Single',
+            'DOUBLE': 'Double'
+        };
+        return typeMap[type] || type || "N/A";
+    };
+
+    // Map backend status
     const mapStatus = (dealStatus) => {
-        const statusMap = {
-            'PENDING': 'lead',
-            'LEAD': 'lead',
-            'APPROVED': 'performa',
-            'PERFORMA': 'performa',
-            'COMPLETED': 'finish',
-            'FINISH': 'finish',
-            'REJECTED': 'finish'
-        };
-        return statusMap[dealStatus] || 'lead';
+        // Backend returns "Lead", "Performa", "Finish" is converted to lowercase
+        return dealStatus?.toLowerCase() || 'lead';
     };
 
-    const calculatePrice = (doorItems) => {
-        if (!doorItems || doorItems.length === 0) return '0 kr';
-        const total = doorItems.reduce((sum, item) => {
-            const materialSum = item.materialCosts?.reduce((a, b) => a + b, 0) || 0;
-            return sum + materialSum;
-        }, 0);
-        return `${total.toLocaleString('da-DK')} kr`;
+    // Format price with our locale
+    const formatPrice = (totalPrice) => {
+        if (totalPrice === null || totalPrice === undefined) return '0 kr';
+        return `${totalPrice.toLocaleString('da-DK')} kr`;
     };
 
+    // Fetch cases on mount
     useEffect(() => {
         fetchCases();
     }, []);
 
+    // Transform API data when received
     useEffect(() => {
-        let allCases = [];
-
         if (apiCases && apiCases.length > 0) {
-            allCases = apiCases.map(CaseWithLocalData);
-        } else {
-            allCases = [...placeholderCases];
+            const transformedCases = apiCases.map(mapCaseToDisplay);
+            setCases(transformedCases);
+        } else if (apiCases) {
+            // Empty array from API - show empty state
+            setCases([]);
         }
-
-        setCases(allCases);
-    }, [apiCases, clientName, userName]);
+    }, [apiCases]);
 
     const goTo = (path) => () => navigate(path);
 
     const handleCaseClick = (caseItem) => {
-        localStorage.setItem("selectedCase", JSON.stringify(caseItem.details || caseItem));
+        // Store the full API case object for the order overview page
+        localStorage.setItem("selectedCase", JSON.stringify(caseItem.details));
         navigate("/orderoverview");
     };
 
@@ -88,8 +81,6 @@ function Case() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('clientName');
         navigate('/');
     };
 
