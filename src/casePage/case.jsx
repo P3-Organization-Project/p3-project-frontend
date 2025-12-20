@@ -81,7 +81,7 @@ function Case() {
 
     const handleCaseClick = (caseItem) => {
         localStorage.setItem("selectedCase", JSON.stringify(caseItem.details || caseItem));
-        navigate("/orderoverview");
+        navigate("/catalogue");
     };
 
     const handleSignOut = () => {
@@ -118,6 +118,9 @@ function Case() {
                     {error && <p className="text-red-600">Fejl: {error}</p>}
 
                     <h1 className="text-2xl font-bold overflow-hidden">Oversigt Over Sager</h1>
+                    <button onClick={goTo("/catalogue")} className="fixed top-16 right-4 px-6 py-3 !bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition">
+                    + Opret Case
+                </button>
                     <table className="case-table">
                         <thead>
                         <tr>
@@ -149,9 +152,7 @@ function Case() {
                 </div>
             </div>
 
-            <button onClick={goTo("/catalogue")} className="fixed bottom-4 right-4 px-6 py-3 !bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition">
-                + Opret Case
-            </button>
+
         </div>
     );
 }
