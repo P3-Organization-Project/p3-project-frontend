@@ -3,39 +3,25 @@ import './login.css';
 import backgroundImage from './assets/LoginPageBackground.jpg';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { authService } from '../api/services/authService';
+import { useAuth } from '../hooks/useAuth';
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+
+    const { login, loading, error } = useAuth();
+    const navigate = useNavigate();
 
     const togglePassword = () => setShowPassword((prev) => !prev);
-    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError('');
-        setLoading(true);
 
-        try {
-            const response = await authService.login({ email, password });
+        const result = await login(email, password);
 
-            if (response.token) {
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('user', JSON.stringify(response.user || { email }));
-                // Store a default client name for temporary use
-                localStorage.setItem('clientName', response.user?.name || 'Default Client');
-                navigate('/case');
-            } else {
-                setError('Login failed. Please check your credentials.');
-            }
-        } catch (err) {
-            setError(err.message || 'Login failed. Please try again.');
-        } finally {
-            setLoading(false);
+        if (result.success) {
+            navigate('/case');
         }
     };
 
