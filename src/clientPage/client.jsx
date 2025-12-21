@@ -2,22 +2,17 @@ import "./client.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import placeholderClients from "../data/placeholderClients.json";
-import { useApi } from "../hooks/useAPI";
-import { healthCheckService } from "../api/services/healthCheckService";
+
 
 import TopBar from "../components/layout/TopBar";
 
 function Client() {
     const navigate = useNavigate();
     const [clients, setClients] = useState([]);
-    const { data: health, loading, error, execute: fetchHealth } = useApi(healthCheckService.getHealth);
 
     useEffect(() => {
         const savedClients = JSON.parse(localStorage.getItem("savedClients") || "[]");
         setClients([...placeholderClients, ...savedClients]);
-
-        // Fetch health check on component mount
-        fetchHealth();
     }, []);
 
     const goTo = (path) => () => navigate(path);
@@ -29,14 +24,6 @@ function Client() {
             {/* Main Content */}
             <div className="h-screen w-screen overflow-hidden bg-white">
                 <div className="client-page">
-                    {/* Health Check Display */}
-                    <div className="mb-4 p-4 bg-gray-100 border border-gray-300 rounded">
-                        <h3 className="font-bold mb-2">Backend Health Check:</h3>
-                        {loading && <p>Loading...</p>}
-                        {error && <p className="text-red-600">Error: {error}</p>}
-                        {health && <pre>{JSON.stringify(health, null, 2)}</pre>}
-                    </div>
-
                     <div className="flex items-center justify-between mb-6">
                         <h1 className="text-2xl font-bold">Oversigt Over Klienter</h1>
                         <button
@@ -55,7 +42,6 @@ function Client() {
                             <th>Telefon</th>
                             <th>Adresse</th>
                             <th>Firmanavn</th>
-                            <th>Antal Sager</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -69,7 +55,6 @@ function Client() {
                                 <td>{client.telefon}</td>
                                 <td>{client.adresse}</td>
                                 <td>{client.firmanavn || "-"}</td>
-                                <td>{client.antalSager}</td>
                             </tr>
                         ))}
                         </tbody>
