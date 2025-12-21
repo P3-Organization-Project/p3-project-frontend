@@ -14,7 +14,7 @@ const initialFormData = {
     antal: "",
     customerId: null,
     customerDetails: null,
-    dørebund: "",
+    dørebund:  "Ingen",
     note: "",
     selectedDoor: null,
     "dørflade": "",

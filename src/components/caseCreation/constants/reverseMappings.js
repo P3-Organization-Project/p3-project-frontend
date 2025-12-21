@@ -10,7 +10,8 @@ import {
     HINGE_SIDE_MAPPINGS,
     SEALANT_GAP_MAPPINGS,
     HINGE_MAPPINGS,
-    LOCK_MAPPINGS
+    LOCK_MAPPINGS,
+    DOOR_BOTTOM_MAPPINGS
 } from './fieldMappings';
 
 import {
@@ -47,6 +48,17 @@ export const REVERSE_SEALANT_GAP = {
     1.0: "10mm"
 };
 
+// Special case:  Door bottom (reverse from boolean pair to Danish selection)
+// Maps [hasBottomSeal, frameIncludesThreshold] back to Danish UI value
+export function reverseDoorBottom(hasBottomSeal, frameIncludesThreshold) {
+    // Convert null to false for comparison
+    const bottomSeal = hasBottomSeal === true;
+    const threshold = frameIncludesThreshold === true;
+
+    if (bottomSeal && ! threshold) return "Bundliste";
+    if (!bottomSeal && threshold) return "Bundstykke";
+    return "Ingen";
+}
 // Material code to wood type (for veneer/frame resolution)
 export const REVERSE_VENEER_CODES = invertMapping(VENEER_CODES);
 export const REVERSE_SHELLING_CODES = invertMapping(SHELLING_CODES);

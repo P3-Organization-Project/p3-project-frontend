@@ -12,9 +12,9 @@ import {
     REVERSE_HINGE,
     REVERSE_LOCK,
     REVERSE_VENEER_CODES,
-    REVERSE_FRAME_CODES
+    REVERSE_FRAME_CODES,
+    reverseDoorBottom
 } from './constants/reverseMappings';
-
 // Resolves veneer code back to Danish wood type
 function resolveWoodTypeFromVeneer(veneerCode) {
     const woodType = REVERSE_VENEER_CODES[veneerCode];
@@ -58,6 +58,15 @@ export function mapApiToFormData(apiCase) {
     // Resolve frame offset
     const offsetFields = resolveFrameOffset(config.frameOffsetCm || 0);
 
+    // Resolve door bottom selection from boolean pair
+    const doorBottom = reverseDoorBottom(
+        config.hasBottomSeal,  // let reverseDoorBottom handles the null case
+        config.frameIncludesThreshold
+    );
+
+    // Hinge side from API  opening direction is derived, not stored in form
+    const hingeSide = REVERSE_HINGE_SIDE[doorItem.hingeSide] || "venstre";
+
     return {
         // Customer reference
         customerId: apiCase.customerId,
@@ -71,14 +80,15 @@ export function mapApiToFormData(apiCase) {
         // Sealant gap - use reverse mapping
         fugeLuft: REVERSE_SEALANT_GAP[config.sealantGapCm] || "10mm",
 
-        // Hinge side - use reverse mapping
-        haengselSide: REVERSE_HINGE_SIDE[doorItem.hingeSide] || "venstre",
+        // Hinge side reverse mapping
+        haengselSide: hingeSide,
 
         // Frame offsets - calculated from single value
         ...offsetFields,
 
-        // Quantity - count of door items
-        antal: apiCase.doorItems?.length?.toString() || "1",
+        // Quantity hasn't been implemented quantity logic yet
+        // Always default to "1" for now
+        antal: "1",
 
         // Note
         note: config.sellerNote || "",
@@ -97,6 +107,7 @@ export function mapApiToFormData(apiCase) {
         // Hardware - use reverse mappings
         "hængsel": REVERSE_HINGE[config.hingeCode] || "Tectus TE 340 3D",
         "låsekasse": REVERSE_LOCK[config.lockCode] || "Boda 2014",
+        "dørebund": doorBottom,
 
         // Door type (for tab selection)
         _doorType: config.type,

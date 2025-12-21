@@ -34,9 +34,9 @@ export const NATURALNESS_MAPPINGS = {
 // Door bottom selection mapping (renamed from Tætningsbånd)
 // Maps to hasBottomSeal and hasThreshold booleans
 export const DOOR_BOTTOM_MAPPINGS = {
-    "Ingen": { hasBottomSeal: false, hasThreshold: false },
-    "Bundliste": { hasBottomSeal: true, hasThreshold: false },
-    "Bundstykke": { hasBottomSeal: false, hasThreshold: true }
+    "Ingen": { hasBottomSeal: false, frameIncludesThreshold: false },
+    "Bundliste": { hasBottomSeal:  true, frameIncludesThreshold: false },
+    "Bundstykke": { hasBottomSeal: false, frameIncludesThreshold:  true }
 };
 
 // Wood type mapping (Træsort selections)
@@ -48,7 +48,7 @@ export const WOOD_TYPE_MAPPINGS = {
 // Hinge side mapping (Hængselside)
 export const HINGE_SIDE_MAPPINGS = {
     "venstre": "LEFT",
-    "hojre": "RIGHT"
+    "højre": "RIGHT"
 };
 
 // Sealant gap mapping (Fuge luft) - converts mm to cm

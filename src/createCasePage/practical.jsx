@@ -214,8 +214,8 @@ function Practical() {
                                     <input
                                         type="checkbox"
                                         className="w-5 h-5 mt-2"
-                                        checked={formData.haengselSide === "hojre"}
-                                        onChange={() => handleChange("haengselSide", formData.haengselSide === "hojre" ? "" : "hojre")}
+                                        checked={formData.haengselSide === "højre"}
+                                        onChange={() => handleChange("haengselSide", formData.haengselSide === "højre" ? "" : "højre")}
                                     />
                                 </label>
                             </div>

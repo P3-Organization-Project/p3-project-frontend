@@ -11,6 +11,7 @@ import {
     SEALANT_GAP_MAPPINGS,
     HINGE_MAPPINGS,
     LOCK_MAPPINGS,
+    DOOR_BOTTOM_MAPPINGS,
     isShelling
 } from './constants/fieldMappings';
 
@@ -22,6 +23,7 @@ import {
     DEFAULT_FRAME_THICKNESS_CM,
     SEAL_CODE,
     DOOR_TYPES,
+    OPENING_DIRECTIONS,
     WOOD_TYPES
 } from './constants/materialCodes';
 // Resolves "Som dørflade" to actual wood type returns (OAK or DOUGLAS)
@@ -80,6 +82,16 @@ function determineDoorType(selectedTab) {
     return selectedTab === "double" ? DOOR_TYPES.DOUBLE : DOOR_TYPES.SINGLE;
 }
 
+// Determines opening direction based on hinge side
+function determineOpeningDirection(hingeSide) {
+    const mappedHingeSide = HINGE_SIDE_MAPPINGS[hingeSide];
+
+    if (mappedHingeSide === "RIGHT") {
+        return OPENING_DIRECTIONS.OUTWARD;
+    }
+    return OPENING_DIRECTIONS.INWARD;  // Default to INWARD for LEFT
+}
+
 // Maps complete form data to API payload format
 export function mapFormToApiPayload(formData, selectedStatus, selectedTab = "single") {
     // Get base wood type from dørflade selection
@@ -105,11 +117,14 @@ export function mapFormToApiPayload(formData, selectedStatus, selectedTab = "sin
     // Map sealant gap (mm to cm) - can only be 0.5 or 1.0
     const sealantGap = SEALANT_GAP_MAPPINGS[formData.fugeLuft] || 1.0;
 
-    // Handle hasBottomSeal and frameIncludesThreshold mutual exclusivity
-    // Both can be false, but if one is true the other must be false
-    // Default: frameIncludesThreshold = true, hasBottomSeal = false
-    const hasBottomSeal = false; // Not yet implemented in UI
-    const frameIncludesThreshold = hasBottomSeal ? false : true;
+    // Map door bottom selection to boolean pair
+    // Default to "Ingen" (both false) if not specified
+    const doorBottomSelection = formData["dørebund"] || "Ingen";
+    const doorBottomConfig = DOOR_BOTTOM_MAPPINGS[doorBottomSelection] || DOOR_BOTTOM_MAPPINGS["Ingen"];
+
+    // Determine hinge side and corresponding opening direction
+    const hingeSide = HINGE_SIDE_MAPPINGS[formData.haengselSide] || "LEFT";
+    const openingDirection = determineOpeningDirection(formData.haengselSide);
 
     // Build door configuration
     const doorConfiguration = {
@@ -139,9 +154,10 @@ export function mapFormToApiPayload(formData, selectedStatus, selectedTab = "sin
         sealantGapCm: sealantGap,
         frameMaterialCode: frameCode,
 
-        // Threshold/seal mutual exclusivity
-        frameIncludesThreshold: frameIncludesThreshold,
-        hasBottomSeal: hasBottomSeal,
+        // Door bottom from DOOR_BOTTOM_MAPPINGS
+        // Possible combinations: [false,false], [true,false], [false,true]
+        frameIncludesThreshold: doorBottomConfig.frameIncludesThreshold,
+        hasBottomSeal:  doorBottomConfig.hasBottomSeal,
 
         // Hardware codes
         hingeCode: HINGE_MAPPINGS[formData["hængsel"]] || "HINGE_TECTUS",
@@ -163,32 +179,25 @@ export function mapFormToApiPayload(formData, selectedStatus, selectedTab = "sin
         dealStatus: selectedStatus?.toUpperCase() || "LEAD",
         doorItems: [
             {
-                hingeSide: HINGE_SIDE_MAPPINGS[formData.haengselSide] || "LEFT",
-                openingDirection: "INWARD",
+                hingeSide:  hingeSide,
+                openingDirection: openingDirection,
                 doorConfiguration: doorConfiguration
             }
         ]
     };
 
-    // Handle antal (quantity) - create multiple door items if needed
-    const quantity = parseInt(formData.antal) || 1;
-    if (quantity > 1) {
-        const baseDoorItem = payload.doorItems[0];
-        payload.doorItems = Array(quantity).fill(null).map(() => ({
-            ...baseDoorItem,
-            doorConfiguration: { ...baseDoorItem.doorConfiguration }
-        }));
-    }
+    // Always send single doorItem to ensure proper case updates
 
     return payload;
 }
 
-// Updates threshold/seal logic - mutually exclusive
-export function updateSealThresholdLogic(doorConfig, hasBottomSeal) {
+// Updates threshold/seal logic which aremutually exclusive
+export function updateSealThresholdLogic(doorConfig, doorBottomSelection) {
+    const config = DOOR_BOTTOM_MAPPINGS[doorBottomSelection] || DOOR_BOTTOM_MAPPINGS["Ingen"];
     return {
         ...doorConfig,
-        hasBottomSeal: hasBottomSeal,
-        frameIncludesThreshold: hasBottomSeal ? false : true
+        hasBottomSeal: config.hasBottomSeal,
+        frameIncludesThreshold: config.frameIncludesThreshold
     };
 }
 
