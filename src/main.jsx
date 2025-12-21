@@ -13,22 +13,24 @@ import Orderoverview from './createCasePage/orderoverview.jsx'
 import Door from './doorPage/door.jsx'
 import Team from './teamPage/team.jsx'
 
-const router = createBrowserRouter([{
-    path: '/', element: <Login />,},
+const router = createBrowserRouter([
+    {path: '/', element: <Login />,},
     {path: '/dashboard', element: <Dashboard />,},
     {path: '/case', element: <Case />,},
     {path: '/client', element: <Client />,},
     {path: '/materiel', element: <Materiel />,},
     {path: '/practical', element: <Practical />,},
+    {path: '/practical/:caseId', element: <Practical />,},
     {path: '/catalogue', element: <Catalogue />,},
+    {path: '/catalogue/:caseId', element: <Catalogue />,},
     {path: '/orderoverview', element: <Orderoverview />,},
+    {path: '/orderoverview/:caseId', element: <Orderoverview />,},
     {path: '/door', element: <Door />,},
     {path: '/team', element: <Team />,},
 ]);
 
-
 ReactDOM.createRoot(document.getElementById('root')).render(
     <StrictMode>
-       <RouterProvider router={router} />
+        <RouterProvider router={router} />
     </StrictMode>,
 )

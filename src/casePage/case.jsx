@@ -22,7 +22,8 @@ function Case() {
     // Logic kept in component - navigation requires component context
     const handleCaseClick = (caseItem) => {
         localStorage.setItem("selectedCase", JSON.stringify(caseItem.details));
-        navigate("/orderoverview");
+        // Navigate with caseId to trigger edit mode
+        navigate(`/orderoverview/${caseItem.id}`);
     };
 
     return (

@@ -18,7 +18,7 @@ import Sidebar from "../components/layout/Sidebar";
 function Practical() {
     const [showExitModal, setShowExitModal] = useState(false);
 
-    // form structure to include customerId
+    // form structure
     const [formData, setFormData] = usePersistentForm("createCaseForm", {
         hulmaalLength: "",
         hulmaalWidth: "",
@@ -30,7 +30,7 @@ function Practical() {
         antal: "",
         customerId: null,
         customerDetails: null,
-        tætningsbånd: "",
+        dørebund: "",
         note: "",
         selectedDoor: null,
     });
@@ -420,16 +420,17 @@ function Practical() {
                                     </select>
                                 </div>
 
-                                {/* Tætningsbånd */}
+                                {/* Døre Bund*/}
                                 <div className="flex flex-col">
-                                    <label className="font-semibold mb-2">Vælg Tætningsbånd</label>
+                                    <label className="font-semibold mb-2">Vælg Døre Bund</label>
                                     <select
                                         className="bg-blue-600 text-white rounded px-4 py-2 shadow-md"
-                                        value={formData["tætningsbånd"] || ""}
-                                        onChange={(e) => handleChange("tætningsbånd", e.target.value)}
+                                        value={formData["dørebund"] || ""}
+                                        onChange={(e) => handleChange("dørebund", e.target.value)}
                                     >
                                         <option value="">-------</option>
-                                        <option value="Schall EX-L 15/30">Schall EX-L 15/30</option>
+                                        <option value="Ingen">Ingen</option>
+                                        <option value="Bundliste">Bundliste</option>
                                         <option value="Bundstykke">Bundstykke</option>
                                     </select>
                                 </div>

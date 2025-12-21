@@ -18,7 +18,7 @@ api.interceptors.request.use(
         );
 
         if (!isPublicEndpoint) {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('accessToken');
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
             }
