@@ -70,7 +70,7 @@ function Case() {
 
             <button
                 onClick={goTo("/catalogue")}
-                className="fixed bottom-4 right-4 px-6 py-3 !bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+                className="fixed top-14 right-4 px-6 py-3 !bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
             >
                 + Opret Case
             </button>

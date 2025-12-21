@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import backgroundImage from './assets/LoginPageBackground.jpg';
+import backgroundImage from '../images/LoginPageBackground.jpg';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAuth } from '../hooks/useAuth';
@@ -32,7 +32,7 @@ function Login() {
                 className="bg-cover bg-center h-screen w-full flex justify-center items-center"
             >
                 <div className="w-96 p-8 bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-2xl border border-white border-opacity-20">
-                    <h1 className="text-3xl text-white text-center font-bold mb-6">
+                    <h1 className="text-3xl text-white text-center font-bold mb-6 overflow-hidden">
                         <i className="fa-solid fa-user mr-2"></i> Login
                     </h1>
                     <hr className="border-gray-400 border-opacity-30 mb-6" />

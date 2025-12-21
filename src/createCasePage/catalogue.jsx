@@ -3,19 +3,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCaseForm } from "../context/CaseFormContext";
 
-import buttonImageA from "./images/singledoorA.jpg";
-import buttonImageB from "./images/singleDoorB.jpg";
-import buttonImageC from "./images/singleDoorC.jpg";
-import buttonImageD from "./images/singleDoorD.jpg";
-import buttonImageE from "./images/singleDoorE.jpg";
-import buttonImageF from "./images/singleDoorF.jpg";
+import buttonImageA from "../images/singledoorA.jpg";
+import buttonImageB from "../images/singleDoorB.jpg";
+import buttonImageC from "../images/singleDoorC.jpg";
+import buttonImageD from "../images/singleDoorD.jpg";
+import buttonImageE from "../images/singleDoorE.jpg";
+import buttonImageF from "../images/singleDoorF.jpg";
 
-import doubleDoorImageA from "./images/doubleDoorA.jpg";
-import doubleDoorImageB from "./images/doubleDoorB.jpg";
-import doubleDoorImageC from "./images/doubleDoorC.jpg";
-import doubleDoorImageD from "./images/doubleDoorD.jpg";
-import doubleDoorImageE from "./images/doubleDoorE.jpg";
-import doubleDoorImageF from "./images/doubleDoorF.jpg";
+import doubleDoorImageA from "../images/doubleDoorA.jpg";
+import doubleDoorImageB from "../images/doubleDoorB.jpg";
+import doubleDoorImageC from "../images/doubleDoorC.jpg";
+import doubleDoorImageD from "../images/doubleDoorD.jpg";
+import doubleDoorImageE from "../images/doubleDoorE.jpg";
+import doubleDoorImageF from "../images/doubleDoorF.jpg";
 
 // Customer management imports
 import { useCustomerManager } from "../hooks/useCustomerManager";

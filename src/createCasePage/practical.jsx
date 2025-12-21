@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCaseForm } from "../context/CaseFormContext";
 
-import rightHingeside from "./images/rightHingeside.png";
-import leftHingeside from "./images/leftHingeside.png";
+import rightHingeside from "../images/rightHingeside.png";
+import leftHingeside from "../images/leftHingeside.png";
 
 import CollapsibleSection from "../hooks/CollapsibleSection.jsx";
 
