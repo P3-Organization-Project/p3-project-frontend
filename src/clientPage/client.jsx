@@ -37,13 +37,13 @@ function Client() {
     };
 
     return (
-        <div className="flex min-h-screen min-w-screen bg-white text-black">
+        <div className="flex min-h-screen min-w-screen bg-white text-black overscroll-hidden">
             <TopBar onLogoClick={() => navigate("/dashboard")} />
 
             <div className="h-screen w-screen overflow-hidden bg-white">
                 <div className="client-page">
-                    <div className="flex items-center justify-between mb-6">
-                        <h1 className="text-2xl font-bold">Oversigt Over Klienter</h1>
+                    <div className="flex items-center justify-between mb-6 ">
+                        <h1 className="text-2xl font-bold ">Oversigt Over Klienter</h1>
                         <button
                             onClick={openNewClientModal}
                             className="px-6 py-3 !bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"

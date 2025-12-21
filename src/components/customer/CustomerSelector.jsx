@@ -64,7 +64,7 @@ function CustomerSelector({
 
             {/* DISPLAY MODE - Moved from practical.jsx and catalogue.jsx */}
             {hasClient && customerDetails && (
-                <div className="bg-white rounded-md border p-3 mt-3">
+                <div className="bg-white rounded-md border p-3 mt-3 items-center">
                     <h3 className="font-semibold text-gray-800 mb-2">Klientoplysninger</h3>
 
                     <p><strong>Navn:</strong> {customerDetails.name}</p>
@@ -76,15 +76,15 @@ function CustomerSelector({
                         <p><strong>Firma:</strong> {customerDetails.companyName}</p>
                     )}
 
-                    <div className="flex justify-center gap-2 mt-3">
+                    <div className="flex justify-center items-center gap-2 mt-3">
                         <button
-                            className="text-gray-400 text-xs underline hover:text-gray-600 transition"
+                            className="flex justify-center items-center px-6 py-2 bg-gray-200/60 text-black rounded hover:bg-gray-300/70"
                             onClick={onResetClient}
                         >
                             Skift
                         </button>
                         <button
-                            className="text-gray-400 text-xs underline hover:text-gray-600 transition"
+                            className="flex justify-center items-center px-6 py-2 bg-gray-200/60 text-black rounded hover:bg-gray-300/70"
                             onClick={onEditClient}
                         >
                             Rediger

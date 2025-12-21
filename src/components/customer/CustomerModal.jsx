@@ -65,7 +65,7 @@ function CustomerModal({
                     </div>
 
                     <div>
-                        <label className="block text-white/80 mb-1 font-medium">Adresse</label>
+                        <label className="block text-white/80 mb-1 font-medium">Adresse*</label>
                         <input
                             type="text"
                             name="address"
@@ -77,7 +77,7 @@ function CustomerModal({
                     </div>
 
                     <div>
-                        <label className="block text-white/80 mb-1 font-medium">Firmanavn</label>
+                        <label className="block text-white/80 mb-1 font-medium">Firmanavn*</label>
                         <input
                             type="text"
                             name="companyName"
