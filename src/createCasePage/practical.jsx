@@ -1,11 +1,11 @@
 import "./catalogue.css";
 import React, { useState } from "react";
-import usePersistentForm from "../hooks/persistentForm.js";
+import { useNavigate } from "react-router-dom";
+import { useCaseForm } from "../context/CaseFormContext";
 
 import rightHingeside from "./images/rightHingeside.png";
 import leftHingeside from "./images/leftHingeside.png";
 
-import { useNavigate } from "react-router-dom";
 import CollapsibleSection from "../hooks/CollapsibleSection.jsx";
 
 import { useCustomerManager } from "../hooks/useCustomerManager";
@@ -18,26 +18,9 @@ import Sidebar from "../components/layout/Sidebar";
 function Practical() {
     const [showExitModal, setShowExitModal] = useState(false);
 
-    // form structure
-    const [formData, setFormData] = usePersistentForm("createCaseForm", {
-        hulmaalLength: "",
-        hulmaalWidth: "",
-        hulmaalThickness: "",
-        fugeLuft: "",
-        haengselSide: "",
-        karmOffsetMinus: "",
-        karmOffsetPlus: "",
-        antal: "",
-        customerId: null,
-        customerDetails: null,
-        dørebund: "",
-        note: "",
-        selectedDoor: null,
-    });
+    // Use context instead of usePersistentForm
+    const { formData, handleChange, isEditMode, loading, caseId } = useCaseForm();
 
-    const handleChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-    };
 
     // Customer management via shared hook
     const {
@@ -67,6 +50,14 @@ function Practical() {
     const navigate = useNavigate();
     const goTo = (path) => () => navigate(path);
 
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <p>Indlæser sag...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex min-h-screen min-w-screen bg-white text-black">
 
@@ -76,7 +67,6 @@ function Practical() {
                         <h2 className="text-xl font-semibold mb-4 text-white">
                             Afbryd uden at gemme?
                         </h2>
-
                         <div className="flex justify-end gap-3">
                             <button
                                 onClick={() => setShowExitModal(false)}
@@ -117,7 +107,6 @@ function Practical() {
                 />
             </Sidebar>
 
-            {/* Client Modal - Using shared CustomerModal component */}
             <CustomerModal
                 isOpen={showClientModal}
                 onClose={() => setShowClientModal(false)}
@@ -133,7 +122,7 @@ function Practical() {
                 <div className="flex flex-col md:flex-row items-start min-h-screen w-full bg-white p-8 gap-8">
                     {/* Left side: collapsible sections */}
                     <div className="flex-1 flex flex-col space-y-8">
-                        {/* Hulmål Section */}
+
                         <CollapsibleSection title="Hulmål" className="w-full max-w-md">
                             <table className="w-full border border-gray-300">
                                 <thead className="bg-gray-100">
@@ -150,7 +139,6 @@ function Practical() {
                                             type="text"
                                             value={formData.hulmaalLength || ""}
                                             onChange={(e) => handleChange("hulmaalLength", e.target.value)}
-                                            placeholder=""
                                             className="w-full border border-gray-300 rounded px-2 py-1"
                                         />
                                     </td>
@@ -159,7 +147,6 @@ function Practical() {
                                             type="text"
                                             value={formData.hulmaalWidth || ""}
                                             onChange={(e) => handleChange("hulmaalWidth", e.target.value)}
-                                            placeholder=""
                                             className="w-full border border-gray-300 rounded px-2 py-1"
                                         />
                                     </td>
@@ -168,7 +155,6 @@ function Practical() {
                                             type="text"
                                             value={formData.hulmaalThickness || ""}
                                             onChange={(e) => handleChange("hulmaalThickness", e.target.value)}
-                                            placeholder=""
                                             className="w-full border border-gray-300 rounded px-2 py-1"
                                         />
                                     </td>
@@ -189,7 +175,6 @@ function Practical() {
                                         onChange={() => handleChange("fugeLuft", formData.fugeLuft === "5mm" ? "" : "5mm")}
                                     />
                                 </label>
-
                                 <label className="flex flex-col items-center">
                                     <span>10mm</span>
                                     <input
@@ -199,7 +184,6 @@ function Practical() {
                                         onChange={() => handleChange("fugeLuft", formData.fugeLuft === "10mm" ? "" : "10mm")}
                                     />
                                 </label>
-
                             </div>
                         </CollapsibleSection>
 
@@ -211,7 +195,8 @@ function Practical() {
                                     <span>Venstre</span>
                                     <div
                                         style={{ backgroundImage: `url(${leftHingeside})`}}
-                                        className="w-64 h-19 bg-gray-100 border border-black mt-1"></div>
+                                        className="w-64 h-19 bg-gray-100 border border-black mt-1"
+                                    />
                                     <input
                                         type="checkbox"
                                         className="w-5 h-5 mt-2"
@@ -224,7 +209,8 @@ function Practical() {
                                     <span>Højre</span>
                                     <div
                                         style={{ backgroundImage: `url(${rightHingeside})`}}
-                                        className="w-64 h-19 bg-gray-100 border border-black mt-1"></div>
+                                        className="w-64 h-19 bg-gray-100 border border-black mt-1"
+                                    />
                                     <input
                                         type="checkbox"
                                         className="w-5 h-5 mt-2"
@@ -232,7 +218,6 @@ function Practical() {
                                         onChange={() => handleChange("haengselSide", formData.haengselSide === "hojre" ? "" : "hojre")}
                                     />
                                 </label>
-
                             </div>
                         </CollapsibleSection>
 
@@ -268,9 +253,8 @@ function Practical() {
                                 </tr>
                                 </tbody>
                             </table>
-
                         </CollapsibleSection>
-                        {/* Træsort Section */}
+
                         <CollapsibleSection title="Træsort">
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-4">
                                 {/* Dørflade */}
@@ -336,7 +320,6 @@ function Practical() {
                                         <option value="Forskalling">Forskalling</option>
                                         <option value="Finér: Bookmatched">Finér: Bookmatched</option>
                                         <option value="Finér: Kaotisk">Finér: Kaotisk</option>
-
                                     </select>
                                 </div>
 
@@ -402,7 +385,6 @@ function Practical() {
                                         <option value="">-------</option>
                                         <option value="Tectus TE 340 3D">Tectus TE 340 3D</option>
                                         <option value="Hamborghængsel">Hamborghængsel</option>
-
                                     </select>
                                 </div>
 
@@ -443,18 +425,18 @@ function Practical() {
                         <CollapsibleSection title="Antal" className="w-full max-w-md">
                             <input
                                 type="text"
-                                value={formData.antal}
+                                value={formData.antal || ""}
                                 onChange={(e) => handleChange("antal", e.target.value)}
                                 placeholder="1, 2, 3"
                                 className="w-full border border-gray-300 rounded px-3 py-2"
                             />
                         </CollapsibleSection>
+
                         <CollapsibleSection title="Note" className="w-full max-w-md">
                             <input
                                 type="text"
-                                value={formData.note}
+                                value={formData.note || ""}
                                 onChange={(e) => handleChange("note", e.target.value)}
-                                placeholder=""
                                 className="w-full border border-gray-300 rounded px-3 py-2"
                             />
                         </CollapsibleSection>
@@ -472,10 +454,15 @@ function Practical() {
                 </div>
             </div>
             {/* Bottom Buttons */}
-            <button onClick={goTo("/catalogue")} className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow">Tilbage</button>
+            <button
+                onClick={() => navigate(caseId ? `/catalogue/${caseId}` : '/catalogue')}
+                className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
+            >
+                Tilbage
+            </button>
 
             <button
-                onClick={goTo("/orderoverview")}
+                onClick={() => navigate(caseId ? `/orderoverview/${caseId}` : '/orderoverview')}
                 disabled={!hasClient}
                 className={`fixed bottom-4 right-4 px-6 py-3 rounded shadow transition ${
                     hasClient

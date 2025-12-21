@@ -1,6 +1,7 @@
 import "./catalogue.css";
 import React, { useState } from "react";
-import usePersistentForm from "../hooks/persistentForm.js";
+import { useNavigate } from "react-router-dom";
+import { useCaseForm } from "../context/CaseFormContext";
 
 import buttonImageA from "./images/singledoorA.jpg";
 import buttonImageB from "./images/singleDoorB.jpg";
@@ -8,6 +9,7 @@ import buttonImageC from "./images/singleDoorC.jpg";
 import buttonImageD from "./images/singleDoorD.jpg";
 import buttonImageE from "./images/singleDoorE.jpg";
 import buttonImageF from "./images/singleDoorF.jpg";
+
 import doubleDoorImageA from "./images/doubleDoorA.jpg";
 import doubleDoorImageB from "./images/doubleDoorB.jpg";
 import doubleDoorImageC from "./images/doubleDoorC.jpg";
@@ -15,27 +17,21 @@ import doubleDoorImageD from "./images/doubleDoorD.jpg";
 import doubleDoorImageE from "./images/doubleDoorE.jpg";
 import doubleDoorImageF from "./images/doubleDoorF.jpg";
 
-import { useNavigate } from "react-router-dom";
+// Customer management imports
+import { useCustomerManager } from "../hooks/useCustomerManager";
+import CustomerModal from "../components/customer/CustomerModal.jsx";
+import CustomerSelector from "../components/customer/CustomerSelector.jsx";
 
 import TopBar from "../components/layout/TopBar";
 import Sidebar from "../components/layout/Sidebar";
 
-// Customer management imports
-import { useCustomerManager } from "../hooks/useCustomerManager";
-import CustomerSelector from "../components/customer/CustomerSelector";
-import CustomerModal from "../components/customer/CustomerModal";
-
 function Catalogue() {
+    const [showExitModal, setShowExitModal] = useState(false);
     const [selectedDoor, setSelectedDoor] = useState(null);
     const [selectedTab, setSelectedTab] = useState("single");
-    const [showExitModal, setShowExitModal] = useState(false);
 
-    // form structure to store customerId instead of individual fields
-    const [formData, setFormData] = usePersistentForm("createCaseForm", {
-        customerId: null,           // Backend customer ID reference
-        customerDetails: null,      // Cached display data for UI
-        selectedDoor: null,
-    });
+    // Use context instead of usePersistentForm
+    const { formData, updateField, isEditMode, loading } = useCaseForm();
 
     const sidebarSteps = [
         { path: "/catalogue", label: "1: Dør Katalog" },
@@ -44,7 +40,7 @@ function Catalogue() {
     ];
 
     const handleChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+        updateField(field, value);
     };
 
     // Customer management hook
@@ -93,6 +89,14 @@ function Catalogue() {
     ];
 
     const doors = selectedTab === "single" ? singleDoors : doubleDoors;
+
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <p>Indlæser sag...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen min-w-screen bg-white text-black">
@@ -159,8 +163,26 @@ function Catalogue() {
             <div className="flex-1 ml-64 overflow-y-auto p-10 relative">
                 {/* Tabs */}
                 <div className="sticky top-12 bg-white z-30 py-4 flex justify-center gap-6 border-b border-gray-200">
-                    <button onClick={() => setSelectedTab("single")} className={`px-4 py-2 bg-blue-500 rounded font-medium transition ${selectedTab === "single" ? "bg-blue-500 text-white shadow-md" : "bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600"}`}>Single Doors</button>
-                    <button onClick={() => setSelectedTab("double")} className={`px-4 py-2 bg-blue-500 rounded font-medium transition ${selectedTab === "double" ? "bg-blue-500 text-white shadow-md" : "bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600"}`}>Double Doors</button>
+                    <button
+                        onClick={() => setSelectedTab("single")}
+                        className={`px-4 py-2 rounded font-medium transition ${
+                            selectedTab === "single"
+                                ? "bg-blue-500 text-white shadow-md"
+                                : "bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600"
+                        }`}
+                    >
+                        Single Doors
+                    </button>
+                    <button
+                        onClick={() => setSelectedTab("double")}
+                        className={`px-4 py-2 rounded font-medium transition ${
+                            selectedTab === "double"
+                                ? "bg-blue-500 text-white shadow-md"
+                                : "bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600"
+                        }`}
+                    >
+                        Double Doors
+                    </button>
                 </div>
 
                 <div className="flex-grow flex items-center justify-center mt-10 w-full px-8">
@@ -175,7 +197,9 @@ function Catalogue() {
                                     backgroundPosition: "center",
                                 }}
                                 className={`text-white font-semibold text-xl px-10 py-5 h-120 w-120 rounded-xl shadow-md transition-all duration-200 ${
-                                    selectedDoor === door.id ? "ring-4 ring-blue-500 scale-105" : "hover:scale-105 hover:ring-2 hover:ring-blue-300"
+                                    selectedDoor === door.id
+                                        ? "ring-4 ring-blue-500 scale-105"
+                                        : "hover:scale-105 hover:ring-2 hover:ring-blue-300"
                                 }`}
                             >
                                 {door.label}
@@ -188,12 +212,19 @@ function Catalogue() {
                 <button onClick={goTo("/case")} className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow">Afbryd</button>
 
                 <button
-                    onClick={(goTo("/practical"))}
+                    onClick={goTo("/case")}
+                    className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
+                >
+                    Afbryd
+                </button>
+
+                <button
+                    onClick={goTo("/practical")}
                     disabled={!hasClient}
                     className={`fixed bottom-4 right-4 px-6 py-3 rounded shadow transition ${
                         hasClient
                             ? "bg-blue-500 text-white hover:bg-blue-600"
-                            : "!bg-gray-300 !text-gray-400 c!ursor-not-allowed !button-pulse !button-shake"
+                            : "!bg-gray-300 !text-gray-400 cursor-not-allowed"
                     }`}
                 >
                     Næste

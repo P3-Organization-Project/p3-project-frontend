@@ -1,8 +1,7 @@
 import "./catalogue.css";
 import React, { useState } from "react";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import usePersistentForm from "../hooks/persistentForm.js";
+import { useNavigate } from "react-router-dom";
+import { useCaseForm } from "../context/CaseFormContext";
 
 // Layout components
 import TopBar from "../components/layout/TopBar";
@@ -11,84 +10,28 @@ import Sidebar from "../components/layout/Sidebar";
 // Case creation components and hooks
 import { useCaseCreation } from "../hooks/useCaseCreation";
 import OrderSummary from "../components/caseCreation/OrderSummary";
-import { useCaseEdit } from "../hooks/useCaseEdit";
 
 function Orderoverview() {
     const [showExitModal, setShowExitModal] = useState(false);
     const navigate = useNavigate();
 
-    const { caseId } = useParams();
-    const { isEditMode, updateCase, loadCase, loading: editLoading } = useCaseEdit(caseId);
-
-    // Form state using persistent form as too keep data across page navigation
-    const [formData, setFormData] = usePersistentForm("createCaseForm", {
-        // Measurements
-        hulmaalLength: "",
-        hulmaalWidth: "",
-        hulmaalThickness: "",
-        fugeLuft: "",
-        haengselSide: "",
-        karmOffsetMinus: "",
-        karmOffsetPlus: "",
-        antal: "",
-        note: "",
-
-        // Customer
-        customerId: null,
-        customerDetails: null,
-
-        // old customer
-        klientNavn: "",
-        klientNummer: "",
-        klientMail: "",
-        klientAdresse: "",
-
-        // Door selection
-        selectedDoor: null,
-
-        // Wood selections
-        "dørflade": "",
-        "dørkant": "",
-        "karm": "",
-
-        // Appearance
-        "udførsel": "",
-        "naturlighed": "",
-        "lappe farve": "",
-        "behandling": "",
-
-        // Hardware
-        "hængsel": "",
-        "låsekasse": "",
-        "tætningsbånd": "",
-    });
-    // Load case data when in edit mode
-    useEffect(() => {
-        if (isEditMode && caseId) {
-            loadCase().then((loadedFormData) => {
-                if (loadedFormData) {
-                    setFormData(loadedFormData);
-                }
-            });
-        }
-    }, [isEditMode, caseId, loadCase, setFormData]);
-    // Sidebar steps configuration
+    // Use context instead of usePersistentForm and useCaseEdit
+    const { formData, updateField, isEditMode, loading, submitCase } = useCaseForm();
+    const { caseId } = useCaseForm()
     const sidebarSteps = [
         { path: "/catalogue", label: "1: Dør Katalog" },
         { path: "/practical", label: "2: Det Praktiske" },
         { path: "/orderoverview", label: "3: Order Oversigt" },
     ];
 
-    // Case creation hook that handles API submission and validation
-    // Replaces: inline onClick handler, useApi call, local state management
+    // Case creation hook for validation and status
     const {
         selectedStatus,
         setSelectedStatus,
         saving,
         validationErrors,
-        apiError,
-        submitCase
-    } = useCaseCreation(formData, setFormData);
+        apiError
+    } = useCaseCreation(formData, (prev) => updateField);
 
     const goTo = (path) => () => navigate(path);
 
@@ -97,14 +40,7 @@ function Orderoverview() {
 
     // Handles case submission
     const handleSubmit = async () => {
-        let result;
-        if (isEditMode) {
-            // Use updateCase from useCaseEdit hook
-            result = await updateCase(formData, selectedStatus);
-        } else {
-            // Use submitCase from useCaseCreation hook
-            result = await submitCase();
-        }
+        const result = await submitCase(selectedStatus);
 
         if (!result.success) {
             alert(`Failed to save: ${result.error || apiError}`);
@@ -112,6 +48,14 @@ function Orderoverview() {
             navigate("/case");
         }
     };
+
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <p>Indlæser sag...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen min-w-screen bg-white text-black">
@@ -123,7 +67,6 @@ function Orderoverview() {
                         <h2 className="text-xl font-semibold mb-4 text-white">
                             Afbryd uden at gemme?
                         </h2>
-
                         <div className="flex justify-end gap-3">
                             <button
                                 onClick={() => setShowExitModal(false)}
@@ -131,7 +74,6 @@ function Orderoverview() {
                             >
                                 Nej
                             </button>
-
                             <button
                                 onClick={() => {
                                     localStorage.removeItem("createCaseForm");
@@ -153,7 +95,6 @@ function Orderoverview() {
             <Sidebar steps={sidebarSteps} />
 
             {/* Main Content */}
-            {/* Replaces: inline JSX for customer info, field groups, price display */}
             <div
                 className="flex-grow flex items-center justify-center mt-10 w-full px-8"
                 style={{ marginLeft: '16rem' }}
@@ -185,7 +126,7 @@ function Orderoverview() {
 
             {/* Bottom Buttons */}
             <button
-                onClick={goTo("/practical")}
+                onClick={() => navigate(caseId ? `/practical/${caseId}` : '/practical')}
                 className="fixed bottom-4 left-4 px-6 py-3 bg-gray-200 rounded text-white hover:bg-gray-300 shadow"
             >
                 Tilbage
@@ -197,7 +138,7 @@ function Orderoverview() {
                 disabled={saving}
                 className="fixed bottom-4 right-4 px-6 py-3 !bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition disabled:opacity-50"
             >
-                {saving ? "Gemmer..." : "Bekræft og Opret"}
+                {saving ? "Gemmer..." : isEditMode ? "Opdater Sag" : "Bekræft og Opret"}
             </button>
         </div>
     );
