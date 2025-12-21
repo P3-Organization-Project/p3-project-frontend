@@ -6,8 +6,7 @@ import { customerService } from '../api/services/customerService';
 //  this hook provides a single source of truth that can be
 //  shared across components.
 export function useCustomerManager(formData, handleChange) {
-    // Logic moved from practical.jsx and catalogue.jsx
-
+    //  most of logic is  moved from practical.jsx and catalogue.jsx
     // Compose the generic useApi hook with specific customer services
     const {
         data: customers,
@@ -22,7 +21,13 @@ export function useCustomerManager(formData, handleChange) {
         execute: executeCreateCustomer
     } = useApi(customerService.createCustomer);
 
-    // Logic moved from practical.jsx and catalogue.jsx
+    // Add update customer hook
+    const {
+        loading: updateLoading,
+        error: updateError,
+        execute: executeUpdateCustomer
+    } = useApi(customerService.updateCustomer);
+
     const [tempClient, setTempClient] = useState({
         name: "",
         email: "",
@@ -32,19 +37,18 @@ export function useCustomerManager(formData, handleChange) {
     });
 
     const [showClientModal, setShowClientModal] = useState(false);
+    const [isEditingClient, setIsEditingClient] = useState(false);
 
     // Fetch customers on hook initialization
     useEffect(() => {
         fetchCustomers();
     }, []);
 
-    // Logic moved from practical.jsx and catalogue.jsx
     const handleTempClientInput = useCallback((e) => {
         const { name, value } = e.target;
         setTempClient((prev) => ({ ...prev, [name]: value }));
     }, []);
 
-    // Logic moved from practical.jsx and catalogue.jsx
     const handleSaveClient = useCallback(async () => {
         const { name, email, phoneNumber, address, companyName } = tempClient;
 
@@ -54,34 +58,50 @@ export function useCustomerManager(formData, handleChange) {
         }
 
         try {
-            const newCustomer = await executeCreateCustomer({
-                name,
-                email,
-                phoneNumber,
-                address: address || "",
-                companyName: companyName || ""
-            });
+            let result;
 
-            // Update form with new customer data
-            handleChange("customerId", newCustomer.id);
+            // Check if we're editing an existing customer
+            if (isEditingClient && formData.customerId) {
+                // Update existing customer
+                result = await executeUpdateCustomer(formData.customerId, {
+                    name,
+                    email,
+                    phoneNumber,
+                    address: address || "",
+                    companyName: companyName || ""
+                });
+            } else {
+                // Create new customer
+                result = await executeCreateCustomer({
+                    name,
+                    email,
+                    phoneNumber,
+                    address: address || "",
+                    companyName: companyName || ""
+                });
+            }
+
+            // Update form with customer data
+            handleChange("customerId", result.id);
             handleChange("customerDetails", {
-                name: newCustomer.name,
-                email: newCustomer.email,
-                phoneNumber: newCustomer.phoneNumber,
-                address: newCustomer.address,
-                companyName: newCustomer.companyName
+                name: result.name,
+                email: result.email,
+                phoneNumber: result.phoneNumber,
+                address: result.address,
+                companyName: result.companyName
             });
 
             await fetchCustomers();
             setShowClientModal(false);
+            setIsEditingClient(false);
             return { success: true };
         } catch (err) {
-            alert("Fejl ved oprettelse af klient: " + (err.message || "Ukendt fejl"));
+            alert("Fejl ved oprettelse/opdatering af klient: " + (err.message || "Ukendt fejl"));
             return { success: false, error: err };
         }
-    }, [tempClient, executeCreateCustomer, handleChange, fetchCustomers]);
+    }, [tempClient, isEditingClient, formData.customerId, executeCreateCustomer, executeUpdateCustomer, handleChange, fetchCustomers]);
 
-    // Logic moved from practical.jsx and catalogue.jsx
+
     const handleSelectExistingClient = useCallback((e) => {
         const customerId = e.target.value;
         if (!customerId) return;
@@ -99,13 +119,13 @@ export function useCustomerManager(formData, handleChange) {
         });
     }, [customers, handleChange]);
 
-    // Logic moved from practical.jsx and catalogue.jsx
     const handleResetClient = useCallback(() => {
         handleChange("customerId", null);
         handleChange("customerDetails", null);
+        setIsEditingClient(false);
     }, [handleChange]);
 
-    // Logic moved from practical.jsx and catalogue.jsx
+    // Open modal for editing existing client
     const handleEditClient = useCallback(() => {
         if (formData.customerDetails) {
             setTempClient({
@@ -115,6 +135,7 @@ export function useCustomerManager(formData, handleChange) {
                 address: formData.customerDetails.address || "",
                 companyName: formData.customerDetails.companyName || "",
             });
+            setIsEditingClient(true);
         }
         setShowClientModal(true);
     }, [formData.customerDetails]);
@@ -122,11 +143,16 @@ export function useCustomerManager(formData, handleChange) {
     // Open modal for new client
     const openNewClientModal = useCallback(() => {
         setTempClient({ name: "", email: "", phoneNumber: "", address: "", companyName: "" });
+        setIsEditingClient(false);
         setShowClientModal(true);
     }, []);
 
-    // Derived state - computed from formData
+    // Derived state  derived from formData
     const hasClient = Boolean(formData.customerId && formData.customerDetails);
+
+    // Combine loading states
+    const loading = createLoading || updateLoading;
+    const error = createError || updateError;
 
     return {
         // Customer list state
@@ -135,8 +161,8 @@ export function useCustomerManager(formData, handleChange) {
         customersError,
 
         // Create customer state
-        createLoading,
-        createError,
+        createLoading: loading,
+        createError: error,
 
         // Modal state
         showClientModal,
