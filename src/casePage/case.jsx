@@ -23,7 +23,7 @@ function Case() {
     const handleCaseClick = (caseItem) => {
         localStorage.setItem("selectedCase", JSON.stringify(caseItem.details));
         // Navigate with caseId to trigger edit mode
-        navigate(`/orderoverview/${caseItem.id}`);
+        navigate(`/practical/${caseItem.id}`);
     };
 
     return (

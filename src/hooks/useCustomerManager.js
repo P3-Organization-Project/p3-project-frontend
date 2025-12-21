@@ -2,12 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useApi } from './useAPI';
 import { customerService } from '../api/services/customerService';
 
-//  Instead of each component managing its own customer state,
-//  this hook provides a single source of truth that can be
-//  shared across components.
 export function useCustomerManager(formData, handleChange) {
-    //  most of logic is  moved from practical.jsx and catalogue.jsx
-    // Compose the generic useApi hook with specific customer services
     const {
         data: customers,
         loading: customersLoading,
@@ -21,12 +16,17 @@ export function useCustomerManager(formData, handleChange) {
         execute: executeCreateCustomer
     } = useApi(customerService.createCustomer);
 
-    // Add update customer hook
     const {
         loading: updateLoading,
         error: updateError,
         execute: executeUpdateCustomer
     } = useApi(customerService.updateCustomer);
+
+    // Add hook for fetching single customer
+    const {
+        loading: fetchOneLoading,
+        execute: fetchCustomerById
+    } = useApi(customerService.getCustomerById);
 
     const [tempClient, setTempClient] = useState({
         name: "",
@@ -43,6 +43,26 @@ export function useCustomerManager(formData, handleChange) {
     useEffect(() => {
         fetchCustomers();
     }, []);
+
+    // Autoload customer details when customerId exists but customerDetails is missing
+    // This handles edit mode where we have the ID from the case but need to fetch details
+    useEffect(() => {
+        const loadCustomerDetails = async () => {
+            if (formData.customerId && !formData.customerDetails) {
+                const result = await fetchCustomerById(formData.customerId);
+                if (result.success && result.data) {
+                    handleChange("customerDetails", {
+                        name: result.data.name,
+                        email: result.data.email,
+                        phoneNumber: result.data.phoneNumber,
+                        address: result.data.address,
+                        companyName: result.data.companyName
+                    });
+                }
+            }
+        };
+        loadCustomerDetails();
+    }, [formData.customerId, formData.customerDetails, fetchCustomerById, handleChange]);
 
     const handleTempClientInput = useCallback((e) => {
         const { name, value } = e.target;
@@ -149,9 +169,7 @@ export function useCustomerManager(formData, handleChange) {
 
     // Derived state  derived from formData
     const hasClient = Boolean(formData.customerId && formData.customerDetails);
-
-    // Combine loading states
-    const loading = createLoading || updateLoading;
+    const loading = createLoading || updateLoading || fetchOneLoading;
     const error = createError || updateError;
 
     return {
