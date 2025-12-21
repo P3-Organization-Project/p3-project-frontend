@@ -8,13 +8,28 @@ const api = axios.create({
     timeout: 10000,
 });
 
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+const publicEndpoints = ['/actuator/health', '/auth'];
+
+api.interceptors.request.use(
+    (config) => {
+        // Check if the endpoint is public
+        const isPublicEndpoint = publicEndpoints.some(endpoint =>
+            config.url?.includes(endpoint)
+        );
+
+        if (!isPublicEndpoint) {
+            const token = localStorage.getItem('accessToken');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-    return config;
-});
+);
 
 api.interceptors.response.use(
     (response) => response,

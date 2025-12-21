@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import overgaardLogo from "../casePage/images/overgaardwoodlogo.jpg";
 import { useNavigate } from 'react-router-dom'
+
+import TopBar from "../components/layout/TopBar";
 
 function Door() {
     const navigate = useNavigate();
-    const goTo = (path) => () => navigate(path);
-    const [accountOpen, setAccountOpen] = useState(false);
 
     const [doorType, setDoorType] = useState("");
     const [file, setFile] = useState(null);
@@ -75,24 +74,9 @@ function Door() {
     return (
         <div className="h-screen w-screen overflow-hidden bg-white">
 
-            {/* Top bar */}
-            <div className="fixed top-0 left-0 w-full h-12 !bg-gray-500 shadow-md z-50 flex items-center justify-between px-6">
-                <div className="flex items-center gap-2">
-                    <button onClick={goTo("/dashboard")} className="h-10 w-10" style={{ backgroundImage: `url(${overgaardLogo})`, backgroundSize: "cover", backgroundPosition: "center" }}></button>
+            {/* TopBar component  */}
+            <TopBar onLogoClick={() => navigate("/dashboard")} />
 
-                </div>
-                <div className="relative">
-                    <button onClick={() => setAccountOpen(!accountOpen)} className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-200 hover:bg-gray-300 transition">
-                        <span className="text-gray-200 font-bold">B</span>
-                    </button>
-                    {accountOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2 z-50">
-                            <button onClick={() => {}} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">Sign Out</button>
-                            <button onClick={() => {}} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">Administer Account</button>
-                        </div>
-                    )}
-                </div>
-            </div>
 
             <div className="Team-page pt-12">
                 <h1 className="text-2xl font-bold overflow-hidden">Dør Side</h1>
